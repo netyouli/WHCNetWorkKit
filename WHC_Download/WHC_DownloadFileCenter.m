@@ -285,6 +285,42 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
 
 /**
  说明：
+ 替换当前代理通过要下载的文件名
+ 使用情景:(当从控制器B进入到控制器C然后在控制器C中进行下载，然后下载过程中突然退出到控制器B，
+ 在又进入到控制器C，这个时候还是在下载但是代理对象和之前的那个控制器C不是一个对象所以要替换)
+ */
+- (void)replaceCurrentDownloadDelegate:(id)delegate fileName:(NSString *)fileName{
+    NSArray   *  operations = _WHCDownloadQueue.operations;
+    if(operations){
+        for (WHC_Download * download in operations) {
+            if([download.saveFileName isEqualToString:fileName]){
+                download.delegate = delegate;
+                break;
+            }
+        }
+    }
+}
+
+/**
+ 说明：
+ 通过要下载的文件名来判断当前是否在进行下载任务
+ */
+- (BOOL)currentIsDownloadTaskWithFileName:(NSString *)fileName{
+    BOOL  result = NO;
+    NSArray   *  operations = _WHCDownloadQueue.operations;
+    if(operations){
+        for (WHC_Download * download in operations) {
+            if([download.saveFileName isEqualToString:fileName]){
+                result = YES;
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+/**
+ 说明：
  恢复所有暂停的下载并返回新下载集合
  */
 - (NSArray *)recoverAllDownloadTask{

@@ -25,8 +25,8 @@ typedef enum:NSInteger{
 
 @protocol WHCDownloadDelegate <NSObject>
 @optional
-//得到第一相应
-- (void)WHCDownload:(WHC_Download *)download didReceiveResponse:(NSURLResponse *)response;
+//得到第一相应并判断要下载的文件是否已经完整下载了
+- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath hasACompleteDownload:(BOOL)has;
 
 //接受下载数据处理下载显示进度和网速
 - (void)WHCDownload:(WHC_Download *)download didReceivedLen:(uint64_t)receivedLen totalLen:(uint64_t)totalLen networkSpeed:(NSString *)networkSpeed;

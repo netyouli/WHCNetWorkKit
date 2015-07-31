@@ -65,20 +65,12 @@
     switch (sender.tag) {
         case 0:{//开始下载
             if(_downUrlTF.text && _downUrlTF.text.length > 0){
-                NSFileManager  * fm = [NSFileManager defaultManager];
-                if([fm fileExistsAtPath:[NSString stringWithFormat:@"%@%@",_filePath, _fileName]]){
-                    //如果存在相同文件
-                    UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"该文件已经存在是否覆盖下载?" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
-                    [alert show];
+                if(_isDownload){
+                    [self alert:@"正在下载"];
                 }else{
-                    
-                    if(_isDownload){
-                        [self alert:@"正在下载"];
-                    }else{
-                        NSURL * url = [NSURL URLWithString:kWHC_DefaultDownloadUrl];
-                        _download = [WHCDownloadCenter startDownloadWithURL:url savePath:_filePath  savefileName:_fileName delegate:self];
-                        _isDownload = YES;
-                    }
+                    NSURL * url = [NSURL URLWithString:kWHC_DefaultDownloadUrl];
+                    _download = [WHCDownloadCenter startDownloadWithURL:url savePath:_filePath  savefileName:_fileName delegate:self];
+                    _isDownload = YES;
                 }
             }else{
                 UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"下载地址错误" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -157,8 +149,14 @@
 
 #pragma mark - WHCDownloadDelegate
 //得到第一响应
-- (void)WHCDownload:(WHC_Download *)download didReceiveResponse:(NSURLResponse *)response{
-    NSLog(@"下载开始");
+- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath hasACompleteDownload:(BOOL)has{
+    NSLog(@"filePath = %@",filePath);
+    if(has){
+        [self alert:@"该文件已经完整下载了"];
+        _isDownload = NO;
+    }else{
+        NSLog(@"下载开始");
+    }
 }
 
 //接受下载数据处理下载显示进度以及下载速度

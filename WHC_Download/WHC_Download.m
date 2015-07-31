@@ -94,6 +94,13 @@
     return _urlConnection != nil;
 }
 
+- (BOOL)isConcurrent{
+    return YES;
+}
+
+- (BOOL)isAsynchronous{
+    return YES;
+}
 #pragma mark - privateMethod
 
 - (void)handleDownloadError:(NSError *)error{
@@ -156,6 +163,10 @@
 
 //取消下载是否删除已下载的文件
 - (void)cancelDownloadTaskAndDelFile:(BOOL)isDel{
+    if(_downloadData.length > 0 && _fileHandle){
+        [_fileHandle writeData:_downloadData];
+        [_downloadData setData:nil];
+    }
     _downloadComplete = isDel;
     [self cancelledDownloadNotify];
     if(isDel){
@@ -183,12 +194,21 @@
 }
 
 - (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse *)response{
+    BOOL  isCancel = YES;
     _actualFileSizeLen = response.expectedContentLength + _localFileSizeLen;
     NSHTTPURLResponse  *  headerResponse = (NSHTTPURLResponse *)response;
-    BOOL  isCancel = YES;
     if(headerResponse.statusCode >= 400){
-        __autoreleasing NSError  * error = [[NSError alloc]initWithDomain:kWHC_Domain code:NetWorkErrorInfo userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:kWHC_ErrorCode,(long)headerResponse.statusCode]}];
-        [self handleDownloadError:error];
+        if(headerResponse.statusCode == 416){
+            _downloadComplete = YES;
+            [self cancelledDownloadNotify];
+            if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
+                [_delegate WHCDownload:self filePath:self.saveFilePath hasACompleteDownload:YES];
+            }
+            return;
+        }else{
+            __autoreleasing NSError  * error = [[NSError alloc]initWithDomain:kWHC_Domain code:NetWorkErrorInfo userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:kWHC_ErrorCode,(long)headerResponse.statusCode]}];
+            [self handleDownloadError:error];
+        }
     }else{
         if([self calculateFreeDiskSpace] < _actualFileSizeLen){
            __autoreleasing NSError  * error = [[NSError alloc]initWithDomain:kWHC_Domain code:FreeDiskSpaceLack userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:kWHC_FreeDiskSapceError,_actualFileSizeLen]}];
@@ -199,8 +219,8 @@
             _timer = [NSTimer scheduledTimerWithTimeInterval:kWHC_DownloadSpeedDuring target:self selector:@selector(calculateDownloadSpeed) userInfo:nil repeats:YES];
             isCancel = NO;
             [_downloadData setData:nil];
-            if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:didReceiveResponse:)]){
-                [_delegate WHCDownload:self didReceiveResponse:response];
+            if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
+                [_delegate WHCDownload:self filePath:self.saveFilePath hasACompleteDownload:NO];
             }
             [self calculateDownloadSpeed];
         }
