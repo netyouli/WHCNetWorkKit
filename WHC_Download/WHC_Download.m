@@ -87,11 +87,11 @@
 }
 
 - (BOOL)isFinished{
-    return _urlConnection != nil;
+    return _urlConnection == nil;
 }
 
 - (BOOL)isCancelled{
-    return _urlConnection != nil;
+    return _urlConnection == nil;
 }
 
 - (BOOL)isConcurrent{

@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import "WHC_Download.h"
 
-#define kWHC_DefaultMaxDownloadCount      (3)       //默认最大并发下载数量
+#define kWHC_DefaultMaxDownloadCount      (2)       //默认最大并发下载数量
 @class WHC_DownloadFileCenter;
 
 #define WHCDownloadCenter  ([WHC_DownloadFileCenter sharedWHCDownloadFileCenter])
@@ -53,24 +53,6 @@
  在外部创建下载队列进行下载
  */
 - (WHC_Download *)startDownloadWithWHCDownload:(WHC_Download *)download;
-
-/**
- 说明：
- 取消所有正等待下载并是否取消删除文件
- */
-- (void)cancelAllWaitDownloadTaskAndDelFile:(BOOL)isDel;
-
-/**
- 说明：
- 取消指定正等待下载url的下载
- */
-- (void)cancelWaitDownloadWithDownUrl:(NSURL *)downUrl delFile:(BOOL)delFile;
-
-/**
- 说明：
- 取消指定正等待下载文件名的下载
- */
-- (void)cancelWaitDownloadWithFileName:(NSString *)fileName delFile:(BOOL)delFile;
 
 /**
  说明：

@@ -47,7 +47,6 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
         _WHCDownloadQueue = [[NSOperationQueue alloc]init];
         _WHCDownloadQueue.maxConcurrentOperationCount = kWHC_DefaultMaxDownloadCount;
         _maxDownloadCount = kWHC_DefaultMaxDownloadCount;
-        _allDownloadArr = [NSMutableArray new];
         _cancleDownloadArr = [NSMutableArray new];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDownloadDidCompleteNotification:) name:kWHC_DownloadDidCompleteNotification object:nil];
     }
@@ -56,15 +55,12 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
 
 - (void)handleDownloadDidCompleteNotification:(NSNotification *)notify{
     WHC_Download  * download = notify.object;
-    if([_allDownloadArr containsObject:download]){
-        BOOL isFinished = download.downloadComplete;
-        if(!isFinished){
-            [_cancleDownloadArr addObject:download];
-        }
-        [_allDownloadArr removeObject:download];
-        if(isFinished){
-            download = nil;
-        }
+    BOOL isFinished = download.downloadComplete;
+    if(!isFinished){
+        [_cancleDownloadArr addObject:download];
+    }
+    if(isFinished){
+        download = nil;
     }
 }
 
@@ -132,48 +128,13 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
     _WHCDownloadQueue.maxConcurrentOperationCount = _maxDownloadCount;
 }
 
-/**
- 说明：
- 取消所有等待的下载并是否取消删除文件
- */
-- (void)cancelAllWaitDownloadTaskAndDelFile:(BOOL)isDel{
-    for (WHC_Download * download in _WHCDownloadQueue.operations) {
-        [download cancelDownloadTaskAndDelFile:isDel];
-    }
-}
-
-/**
- 说明：
- 取消指定等待的下载url的下载
- */
-- (void)cancelWaitDownloadWithDownUrl:(NSURL *)downUrl delFile:(BOOL)delFile{
-    for(WHC_Download * download in _WHCDownloadQueue.operations){
-        if([download.downUrl.absoluteString isEqualToString:downUrl.absoluteString]){
-            [download cancelDownloadTaskAndDelFile:delFile];
-            break;
-        }
-    }
-}
-
-/**
- 说明：
- 取消指定等待的下载文件名的下载
- */
-- (void)cancelWaitDownloadWithFileName:(NSString *)fileName delFile:(BOOL)delFile{
-    for(WHC_Download * download in _WHCDownloadQueue.operations){
-        if([download.saveFileName isEqualToString:fileName]){
-            [download cancelDownloadTaskAndDelFile:delFile];
-            break;
-        }
-    }
-}
 
 /**
  说明：
  取消所有正下载并是否取消删除文件
  */
 - (void)cancelAllDownloadTaskAndDelFile:(BOOL)isDel{
-    for (WHC_Download * download in _allDownloadArr) {
+    for (WHC_Download * download in _WHCDownloadQueue.operations) {
         if(![_WHCDownloadQueue.operations containsObject:download]){
             [download cancelDownloadTaskAndDelFile:isDel];
         }
@@ -185,11 +146,9 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  取消指定正下载url的下载
  */
 - (void)cancelDownloadWithDownUrl:(NSURL *)downUrl delFile:(BOOL)delFile{
-    for(WHC_Download * download in _allDownloadArr){
+    for(WHC_Download * download in _WHCDownloadQueue.operations){
         if([download.downUrl.absoluteString isEqualToString:downUrl.absoluteString]){
-            if(![_WHCDownloadQueue.operations containsObject:download]){
-                [download cancelDownloadTaskAndDelFile:delFile];
-            }
+            [download cancelDownloadTaskAndDelFile:delFile];
             break;
         }
     }
@@ -200,11 +159,9 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  取消指定正下载文件名的下载
  */
 - (void)cancelDownloadWithFileName:(NSString *)fileName delFile:(BOOL)delFile{
-    for(WHC_Download * download in _allDownloadArr){
+    for(WHC_Download * download in _WHCDownloadQueue.operations){
         if([download.saveFileName isEqualToString:fileName]){
-            if(![_WHCDownloadQueue.operations containsObject:download]){
-                [download cancelDownloadTaskAndDelFile:delFile];
-            }
+            [download cancelDownloadTaskAndDelFile:delFile];
             break;
         }
     }
