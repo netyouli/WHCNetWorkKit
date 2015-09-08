@@ -27,13 +27,20 @@ WHC_Download  * _download = [WHCDownloadCenter startDownloadWithURL:url
 //下载代理实现
 #pragma mark - WHCDownloadDelegate
 //得到第一响应
-- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath hasACompleteDownload:(BOOL)has{
+- (void)WHCDownload:(WHC_Download *)download 
+           filePath:(NSString *)filePath 
+          hasACompleteDownload:(BOOL)has{
+
     //has 表示是否磁盘有一个完整下载的文件如果has = YES 表示有无需下载 否则可继续下载
     NSLog(@"下载开始");
 }
 
 //接受下载数据处理下载显示进度以及下载速度
-- (void)WHCDownload:(WHC_Download *)download didReceivedLen:(uint64_t)receivedLen totalLen:(uint64_t)totalLen networkSpeed:(NSString *)networkSpeed{
+- (void)WHCDownload:(WHC_Download *)download 
+     didReceivedLen:(uint64_t)receivedLen 
+           totalLen:(uint64_t)totalLen 
+       networkSpeed:(NSString *)networkSpeed{
+
     CGFloat  percent = (CGFloat)receivedLen / totalLen * 100.0;
     _percentLab.text = [NSString stringWithFormat:@"%.1f%%",percent];  //显示下载百分比
     _downProgressV.progress = percent / 100.0;                         //显示下载进度
@@ -59,14 +66,21 @@ WHC_Download  * _download = [WHCDownloadCenter startDownloadWithURL:url
             default:
             break;
         }
-        UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"下载出错误" message:strError delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"下载出错误" 
+                                                         message:strError 
+                                                        delegate:nil 
+                                               cancelButtonTitle:@"确定" 
+                                               otherButtonTitles:nil, nil];
         [alert show];
     }
     _isDownload = NO;
 }
 
 //下载结束处理
-- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath isSuccess:(BOOL)success{
+- (void)WHCDownload:(WHC_Download *)download 
+           filePath:(NSString *)filePath 
+          isSuccess:(BOOL)success{
+
     NSLog(@"filePath = %@",filePath);
     if(success){
         UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"阿超已经帮你下载完成" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
