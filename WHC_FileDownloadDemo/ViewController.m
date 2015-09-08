@@ -15,34 +15,44 @@
 
 #import "ViewController.h"
 #import "WHC_DownloadFileCenter.h"
+#import "WHC_OffLineVideoVC.h"
+#import "UIView+WHC_Toast.h"
+#import "UIView+WHC_Loading.h"
+#import "UIScrollView+WHC_PullRefresh.h"
 
+#define kWHC_CellName             (@"WHC：视频下载文件")
 #define kWHC_DefaultDownloadUrl   (@"http://s.dingboshi.cn:8080/school/file/201507/resource/79e01f8be9db444291257b067ccffbc7.mp4")
-@interface ViewController ()<WHCDownloadDelegate>{
-    WHC_Download  * _download;            //当前下载对象
-    NSString      * _filePath;            //保存下载文件路径
-    NSString      * _fileName;            //自定义存储下载文件名
-    BOOL            _isDownload;          //是否进行了下载
+@interface ViewController ()<WHCDownloadDelegate,WHC_PullRefreshDelegate>{
+    NSMutableArray  *  _fileNameArr;
 }
-@property (nonatomic , strong)IBOutlet  UITextField     * downUrlTF;               //url编辑框
-@property (nonatomic , strong)IBOutlet  UIProgressView  * downProgressV;           //下载进度条
-@property (nonatomic , strong)IBOutlet  UILabel         * percentLab;              //下载百分比标签
-@property (nonatomic , strong)IBOutlet  UILabel         * curDownloadSizeLab;      //当前下载文件大小标签
-@property (nonatomic , strong)IBOutlet  UILabel         * downloadSpeedLab;        //当前下载速度标签
-@property (nonatomic , strong)IBOutlet  UIButton        * startDownloadBtn;        //开始下载按钮
-@property (nonatomic , strong)IBOutlet  UIButton        * cancelDownloadBtn;       //取消下载按钮
-@property (nonatomic , strong)IBOutlet  UIButton        * cancelAndDelDownloadBtn; //取消下载和删除文件按钮
-@property (nonatomic , strong)IBOutlet  UIButton        * restartDownloadBtn;      //继续下载按钮
-@property (nonatomic , strong)IBOutlet  UIButton        * delDownloadBtn;          //删除文件按钮
+@property (nonatomic , strong)IBOutlet UITableView * downloadTv;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initData];
     [self layoutUI];
-    _filePath = [NSString stringWithFormat:@"%@/Library/Caches/WHCFiles/",NSHomeDirectory()];
-    _fileName = @"吴海超下载测试文件.mp4";
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)initData{
+    _fileNameArr = [NSMutableArray array];
+    for (NSInteger i = 0; i < 10 ; i++) {
+        [_fileNameArr addObject:[NSString stringWithFormat:@"%@%ld    (%@)",kWHC_CellName,i + 1,@"单击下载视频文件"]];
+    }
+}
+
+- (void)layoutUI{
+    self.navigationItem.title = @"iOS专业级文件下载解决方案";
+    UIBarButtonItem * rightItem = [[UIBarButtonItem alloc]initWithTitle:@"离线视频中心" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightItem:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+    [_downloadTv setWHCRefreshStyle:AllStyle delegate:self];
+}
+
+- (void)clickRightItem:(UIBarButtonItem *)sender{
+    [self.navigationController pushViewController:[WHC_OffLineVideoVC new] animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,155 +60,142 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-- (void)layoutUI{
-    _downUrlTF.text = kWHC_DefaultDownloadUrl;
-}
-
 - (void)alert:(NSString *)msg{
     UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:msg message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
 }
 
-#pragma mark - action
-- (IBAction)clickStartDownload:(UIButton *)sender{
-    switch (sender.tag) {
-        case 0:{//开始下载
-            if(_downUrlTF.text && _downUrlTF.text.length > 0){
-                if(_isDownload){
-                    [self alert:@"正在下载"];
-                }else{
-                    NSURL * url = [NSURL URLWithString:kWHC_DefaultDownloadUrl];
-                    _download = [WHCDownloadCenter startDownloadWithURL:url savePath:_filePath  savefileName:_fileName delegate:self];
-                    _isDownload = YES;
-                }
-            }else{
-                UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"下载地址错误" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
-            }
-        }
-            break;
-        case 1:{//取消下载
-            [WHCDownloadCenter cancelDownloadWithFileName:_fileName delFile:NO];
-            _isDownload = NO;
-        }
-            break;
-        case 2:{//取消下载并删除文件
-            [WHCDownloadCenter cancelDownloadWithFileName:_fileName delFile:YES];
-            _isDownload = NO;
-        }
-            break;
-        case 3:{//继续下载
-            if(_isDownload){
-                [self alert:@"正在下载"];
-            }else{
-                _download = [WHCDownloadCenter recoverDownloadWithName:_fileName];
-                _isDownload = YES;
-            }
-        }
-            break;
-        case 4:{//删除文件
-            if(_isDownload){
-                [self alert:@"正在下载"];
-            }else{
-                __autoreleasing NSError  * error = nil;
-                NSString  *  strError = nil;
-                NSFileManager  * fm = [NSFileManager defaultManager];
-                NSString  * filePath = [NSString stringWithFormat:@"%@%@",_filePath , _fileName];
-                if([fm fileExistsAtPath:filePath]){
-                    [fm removeItemAtPath:filePath error:&error];
-                }
-                if(error){
-                    strError = @"文件删除失败";
-                }else{
-                    strError = @"文件删除成功";
-                }
-                UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:strError message:error.description delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
-            }
-        }
-        default:
-            break;
-    }
-    }
+#pragma mark - 上拉下拉刷新代理
 
-- (IBAction)exitKeyborad:(UITextField *)sender{
-    [sender resignFirstResponder];
+//上拉刷新回调
+- (void)WHCUpPullRequest{
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        NSInteger count = _fileNameArr.count - 1;
+        for (NSInteger i = count; i < count + 3; i++) {
+            [_fileNameArr addObject:[NSString stringWithFormat:@"%@%ld    (%@)",kWHC_CellName,i + 1,@"单击下载视频文件"]];
+        }
+        [_downloadTv WHCDidCompletedWithRefreshIsDownPull:NO];
+        [_downloadTv reloadData];
+    });
+
 }
 
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(buttonIndex == 0){//覆盖下载
-        __autoreleasing NSError  * error = nil;
-        NSFileManager  * fm = [NSFileManager defaultManager];
-        [fm removeItemAtPath:[NSString stringWithFormat:@"%@%@",_filePath,_fileName] error:&error];
-        if(error){
-            UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"文件删除失败" message:error.description delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }else{
-            if(_isDownload){
-                [self alert:@"正在下载"];
-            }else{
-                NSURL * url = [NSURL URLWithString:kWHC_DefaultDownloadUrl];
-                _download = [WHCDownloadCenter startDownloadWithURL:url savePath:_filePath  savefileName:_fileName delegate:self];
-                _isDownload = YES;
-            }
+//下拉刷新回调
+- (void)WHCDownPullRequest{
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        NSInteger count = _fileNameArr.count - 1;
+        for (NSInteger i = count; i > count - 3; i--) {
+            [_fileNameArr removeObjectAtIndex:i];
         }
+        [_downloadTv WHCDidCompletedWithRefreshIsDownPull:YES];
+        [_downloadTv reloadData];
+    });
+
+}
+
+#pragma mark - 列表代理方法
+#pragma mark - UITableViewDelegate UITableViewDataSource
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 50.0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return [UIView new];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return _fileNameArr.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell  * cell = [tableView dequeueReusableCellWithIdentifier:kWHC_CellName];
+    if(cell == nil){
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kWHC_CellName];
     }
+    cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+    cell.textLabel.text = _fileNameArr[indexPath.row];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    NSString * fileName = _fileNameArr[indexPath.row];
+    if([Account downloadStateVoideFile:fileName]){
+        [self.view toast:@"该视频已在个人中心离线视频中"];
+        return;
+    }
+    if([WHCDownloadCenter downloadList].count < [WHCDownloadCenter maxDownloadCount]){
+        [self.view startLoading];
+        self.navigationController.navigationBar.userInteractionEnabled = NO;
+    }else{
+        [self.view toast:@"已经添加到了下载缓存"];
+    }
+    NSString * saveFilePath = Account.videoFolder;
+    [WHCDownloadCenter startDownloadWithURL:[NSURL URLWithString:kWHC_DefaultDownloadUrl] savePath:saveFilePath savefileName:fileName delegate:self];
 }
 
 #pragma mark - WHCDownloadDelegate
-//得到第一响应
+//得到第一相应并判断要下载的文件是否已经完整下载了
 - (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath hasACompleteDownload:(BOOL)has{
-    NSLog(@"filePath = %@",filePath);
+    self.navigationController.navigationBar.userInteractionEnabled = YES;
+    [self.view stopLoading];
     if(has){
-        [self alert:@"该文件已经完整下载了"];
-        _isDownload = NO;
+        [self.view toast:@"该文件已下载请前往个人离线视频中心"];
     }else{
-        NSLog(@"下载开始");
-    }
-}
-
-//接受下载数据处理下载显示进度以及下载速度
-- (void)WHCDownload:(WHC_Download *)download didReceivedLen:(uint64_t)receivedLen totalLen:(uint64_t)totalLen networkSpeed:(NSString *)networkSpeed{
-    CGFloat  percent = (CGFloat)receivedLen / totalLen * 100.0;
-    _percentLab.text = [NSString stringWithFormat:@"%.1f%%",percent];  //显示下载百分比
-    _downProgressV.progress = percent / 100.0;                         //显示下载进度
-    //显示下载文件大小
-    _curDownloadSizeLab.text = [NSString stringWithFormat:@"%.1fMB/%.1fMB",((CGFloat)receivedLen / 1024.0) / 1024.0 ,((CGFloat)totalLen / 1024.0) / 1024.0];
-    _downloadSpeedLab.text = networkSpeed;                            //显示当前下载速度
-}
-
-//下载出错处理
-- (void)WHCDownload:(WHC_Download *)download error:(NSError *)error{
-    if(error){
-        NSString  * strError = error.description;
-        switch (error.code) {
-            case GeneralErrorInfo:
-                NSLog(@"一般出错");
-                 break;
-            case NetWorkErrorInfo:
-                NSLog(@"网络错误");
-                break;
-            case FreeDiskSpaceLack:
-                NSLog(@"磁盘剩余空间不足");
-                break;
-            default:
-                break;
+        [self.view toast:@"已经添加到了下载缓存"];
+        NSMutableDictionary * downloadRecordDict = [NSMutableDictionary dictionaryWithContentsOfFile:Account.videoFileRecordPath];
+        NSMutableDictionary * dict = downloadRecordDict[download.saveFileName];
+        CGFloat  percent = (CGFloat)(download.downloadLen) / download.totalLen * 100.0;
+        if(dict == nil){
+            [downloadRecordDict setObject:@{@"fileName":download.saveFileName,
+                                            @"currentDownloadLen":[NSString stringWithFormat:@"%.1fMB",((CGFloat)(download.downloadLen) / kWHC_1MB)],
+                                            @"totalLen":[NSString stringWithFormat:@"%.1fMB",((CGFloat)(download.totalLen) / kWHC_1MB)],
+                                            @"speed":@"0KB/S",
+                                            @"processValue":@(percent / 100.0),
+                                            @"downPath":download.downPath,
+                                            @"state":@(Downloading)}.mutableCopy forKey:download.saveFileName];
+            [downloadRecordDict writeToFile:Account.videoFileRecordPath atomically:YES];
+        }else{
+            [dict setObject:([NSString stringWithFormat:@"%.1fMB",((CGFloat)(download.downloadLen) / kWHC_1MB)]).copy forKey:@"currentDownloadLen"];
+            [dict setObject:[NSString stringWithFormat:@"%.1fMB",((CGFloat)(download.totalLen) / kWHC_1MB)] forKey:@"totalLen"];
+            [dict setObject:@(percent / 100.0) forKey:@"processValue"];
+            [dict setObject:@(Downloading) forKey:@"state"];
+            if([dict[@"downPath"] isEqualToString:@""]){
+                [dict setObject:download.downPath forKey:@"downPath"];
+            }
+            [downloadRecordDict setObject:dict forKey:download.saveFileName];
+            [downloadRecordDict writeToFile:Account.videoFileRecordPath atomically:YES];
         }
-        UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"下载出错误" message:strError delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
     }
-    _isDownload = NO;
 }
 
-//下载结束处理
-- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath isSuccess:(BOOL)success{
-    NSLog(@"filePath = %@",filePath);
-    if(success){
-        UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:@"阿超已经帮你下载完成" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    _isDownload = NO;
+//下载出错
+- (void)WHCDownload:(WHC_Download *)download error:(NSError *)error{
+    [self.view toast:[NSString stringWithFormat:@"文件:%@下载错误%@",download.saveFileName , error]];
+    [self.view stopLoading];
+    self.navigationController.navigationBar.userInteractionEnabled = YES;
 }
+
+//跟新下载进度
+- (void)WHCDownload:(WHC_Download *)download
+     didReceivedLen:(uint64_t)receivedLen
+           totalLen:(uint64_t)totalLen
+       networkSpeed:(NSString *)networkSpeed{
+    
+}
+
+//下载结束
+- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath isSuccess:(BOOL)success{
+    if(success){
+        [self.view toast:[NSString stringWithFormat:@"文件:%@下载成功",download.saveFileName]];
+    }
+    [self.view stopLoading];
+    self.navigationController.navigationBar.userInteractionEnabled = YES;
+}
+
 @end

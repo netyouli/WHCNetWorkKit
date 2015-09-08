@@ -27,7 +27,8 @@ WHC_Download  * _download = [WHCDownloadCenter startDownloadWithURL:url
 //下载代理实现
 #pragma mark - WHCDownloadDelegate
 //得到第一响应
-- (void)WHCDownload:(WHC_Download *)download didReceiveResponse:(NSURLResponse *)response{
+- (void)WHCDownload:(WHC_Download *)download filePath:(NSString *)filePath hasACompleteDownload:(BOOL)has{
+    //has 表示是否磁盘有一个完整下载的文件如果has = YES 表示有无需下载 否则可继续下载
     NSLog(@"下载开始");
 }
 

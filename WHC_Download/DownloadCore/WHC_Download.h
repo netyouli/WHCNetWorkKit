@@ -42,10 +42,15 @@ typedef enum:NSInteger{
 @interface WHC_Download : NSOperation
 
 @property (nonatomic , assign)id<WHCDownloadDelegate>delegate;
-@property (nonatomic , retain)NSString       *   saveFilePath;
-@property (nonatomic , retain)NSString       *   saveFileName;
-@property (nonatomic , retain)NSURL          *   downUrl;
-@property (nonatomic , assign)BOOL               downloadComplete;
+@property (nonatomic , retain)NSString       *   saveFilePath;      //文件名路径
+@property (nonatomic , retain)NSString       *   saveFileName;      //文件名
+@property (nonatomic , retain)NSURL          *   downUrl;           //下载地址
+@property (nonatomic , retain , readonly)NSString       *   downPath;           //下载地址
+@property (nonatomic , assign , readonly)BOOL               downloadComplete;  //下载是否完成
+@property (nonatomic , assign , readonly)BOOL               downloading;       //是否正在下载
+
+@property (nonatomic , assign , readonly)uint64_t           downloadLen;       //下载实际长度
+@property (nonatomic , assign , readonly)uint64_t           totalLen;          //文件实际总长度
 //取消下载是否删除已下载的文件
 - (void)cancelDownloadTaskAndDelFile:(BOOL)isDel;
 

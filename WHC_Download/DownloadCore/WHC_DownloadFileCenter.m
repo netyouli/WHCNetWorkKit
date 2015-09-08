@@ -20,9 +20,7 @@
 
 @interface WHC_DownloadFileCenter (){
     NSOperationQueue      *     _WHCDownloadQueue;   //下载队列
-    NSMutableArray        *     _allDownloadArr;     //所有下载
     NSMutableArray        *     _cancleDownloadArr;  //所取消的下载
-    
     NSUInteger                  _maxDownloadCount;   //最大下载数
 }
 
@@ -58,13 +56,36 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
     BOOL isFinished = download.downloadComplete;
     if(!isFinished){
         [_cancleDownloadArr addObject:download];
+    }else if([_cancleDownloadArr containsObject:download]){
+        [_cancleDownloadArr removeObject:download];
     }
     if(isFinished){
         download = nil;
     }
 }
-
 #pragma mark - publicMethod
+
+//获取下载列表
+- (NSArray *)downloadList{
+    return _WHCDownloadQueue.operations;
+}
+
+//是否存在取消的下载
+- (BOOL)existCancelDownload{
+    return _cancleDownloadArr.count > 0;
+}
+
+//返回指定文件名下载对象
+- (WHC_Download *)downloadWithFileName:(NSString *)fileName{
+    WHC_Download * download = nil;
+    for (WHC_Download * tempDownload in _WHCDownloadQueue.operations) {
+        if([tempDownload.saveFileName isEqualToString:fileName]){
+            download = tempDownload;
+            break;
+        }
+    }
+    return download;
+}
 
 /**
  参数说明：
@@ -90,16 +111,23 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
                               savePath:(NSString *)savePath
                           savefileName:(NSString*)savefileName
                               delegate:(id<WHCDownloadDelegate>)delegate{
-    
     WHC_Download  * download = nil;
+    NSString * fielName = nil;
+    if(savefileName){
+        NSString * format = [WHC_DownloadFileCenter fileFormat:url.absoluteString];
+        if([format isEqualToString:[NSString stringWithFormat:@".%@",[[savefileName componentsSeparatedByString:@"."] lastObject]]]){
+            fielName = savefileName;
+        }else{
+            fielName = [NSString stringWithFormat:@"%@%@",savefileName,format];
+        }
+    }
     if([self createFileSavePath:savePath]){
         download = [WHC_Download new];
         download.delegate = delegate;
-        download.saveFileName = savefileName;
+        download.saveFileName = fielName;
         download.saveFilePath = savePath;
         download.downUrl = url;
         [_WHCDownloadQueue addOperation:download];
-        [_allDownloadArr addObject:download];
     }
     return download;
 }
@@ -111,7 +139,6 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
 - (WHC_Download *)startDownloadWithWHCDownload:(WHC_Download *)download{
     if(download){
         [_WHCDownloadQueue addOperation:download];
-        [_allDownloadArr addObject:download];
     }else{
         NSLog(kWHC_DownloadObjectNilTxt);
     }
@@ -128,6 +155,12 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
     _WHCDownloadQueue.maxConcurrentOperationCount = _maxDownloadCount;
 }
 
+/**
+ 说明:返回下载中心最大同时下载操作个数
+ */
+- (NSInteger)maxDownloadCount{
+    return _WHCDownloadQueue.maxConcurrentOperationCount;
+}
 
 /**
  说明：
@@ -171,7 +204,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  说明：
  恢复指定暂停正下载文件名的下载并返回新下载
  */
-- (WHC_Download *)recoverDownloadWithName:(NSString *)fileName{
+- (WHC_Download *)recoverDownloadWithName:(NSString *)fileName delegate:(id)delegate{
     
     for (int i = 0; i < _cancleDownloadArr.count; i++) {
         WHC_Download * download = _cancleDownloadArr[i];
@@ -181,7 +214,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
             nDownload = [self startDownloadWithURL:download.downUrl
                                           savePath:strSavePath
                                       savefileName:download.saveFileName
-                                          delegate:download.delegate];
+                                          delegate:delegate];
             [_cancleDownloadArr removeObject:download];
             download = nil;
             return nDownload;
@@ -195,7 +228,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  说明：
  恢复指暂停下载url的下载并返回新下载
  */
-- (WHC_Download *)recoverDownloadWithDownUrl:(NSURL *)downUrl{
+- (WHC_Download *)recoverDownloadWithDownUrl:(NSURL *)downUrl delegate:(id)delegate{
     
     for (int i = 0; i < _cancleDownloadArr.count; i++) {
         WHC_Download * download = _cancleDownloadArr[i];
@@ -205,7 +238,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
             nDownload = [self startDownloadWithURL:download.downUrl
                                           savePath:strSavePath
                                       savefileName:download.saveFileName
-                                          delegate:download.delegate];
+                                          delegate:delegate];
             [_cancleDownloadArr removeObject:download];
             download = nil;
             return nDownload;
@@ -219,7 +252,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  恢复指定暂停的下载并返回新下载
  */
 
-- (WHC_Download *)recoverDownload:(WHC_Download *)download{
+- (WHC_Download *)recoverDownload:(WHC_Download *)download delegate:(id)delegate{
     
     if(download){
         for (int i = 0; i < _cancleDownloadArr.count; i++) {
@@ -230,7 +263,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
                 nDownload = [self startDownloadWithURL:tempDownload.downUrl
                                               savePath:strSavePath
                                           savefileName:tempDownload.saveFileName
-                                              delegate:tempDownload.delegate];
+                                              delegate:delegate];
                 [_cancleDownloadArr removeObject:tempDownload];
                 tempDownload = nil;
                 return nDownload;
@@ -246,16 +279,32 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  使用情景:(当从控制器B进入到控制器C然后在控制器C中进行下载，然后下载过程中突然退出到控制器B，
  在又进入到控制器C，这个时候还是在下载但是代理对象和之前的那个控制器C不是一个对象所以要替换)
  */
-- (void)replaceCurrentDownloadDelegate:(id)delegate fileName:(NSString *)fileName{
+- (BOOL)replaceCurrentDownloadDelegate:(id)delegate fileName:(NSString *)fileName{
     NSArray   *  operations = _WHCDownloadQueue.operations;
     if(operations){
         for (WHC_Download * download in operations) {
             if([download.saveFileName isEqualToString:fileName]){
                 download.delegate = delegate;
-                break;
+                return YES;
             }
         }
     }
+    return NO;
+}
+
+//替换所有当前下载代理
+- (BOOL)replaceCurrentDownloadDelegate:(id)delegate{
+    BOOL result = NO;
+    NSArray   *  operations = _WHCDownloadQueue.operations;
+    if(operations.count > 0){
+        result = YES;
+    }
+    if(operations){
+        for (WHC_Download * download in operations) {
+            download.delegate = delegate;
+        }
+    }
+    return result;
 }
 
 /**
@@ -280,7 +329,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
  说明：
  恢复所有暂停的下载并返回新下载集合
  */
-- (NSArray *)recoverAllDownloadTask{
+- (NSArray *)recoverAllDownloadTaskDelegate:(id)delegate{
     NSMutableArray  * downloadArr = [NSMutableArray new];
     for (int i = 0; i < _cancleDownloadArr.count; i++) {
         WHC_Download * download = _cancleDownloadArr[i];
@@ -289,7 +338,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
         nDownload = [self startDownloadWithURL:download.downUrl
                                       savePath:strSavePath
                                   savefileName:download.saveFileName
-                                      delegate:download.delegate];
+                                      delegate:delegate];
         [_cancleDownloadArr removeObject:download];
         download = nil;
         [downloadArr addObject:nDownload];
@@ -298,6 +347,15 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
 }
 
 #pragma mark - privateMothed
+
++ (NSString *)fileFormat:(NSString *)downloadUrl{
+    NSArray  * strArr = [downloadUrl componentsSeparatedByString:@"."];
+    if(strArr && strArr.count > 0){
+        return [NSString stringWithFormat:@".%@",strArr.lastObject];
+    }else{
+        return nil;
+    }
+}
 
 - (BOOL)createFileSavePath:(NSString *)savePath{
     BOOL  result = YES;
@@ -317,4 +375,5 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
     }
     return result;
 }
+
 @end

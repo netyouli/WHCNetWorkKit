@@ -16,14 +16,25 @@
 #import <Foundation/Foundation.h>
 #import "WHC_Download.h"
 
-#define kWHC_DefaultMaxDownloadCount      (2)       //默认最大并发下载数量
+#define kWHC_DefaultMaxDownloadCount      (2)            //默认最大并发下载数量
+#define kWHC_1MB                          (1024 * 1024)  //一兆
 @class WHC_DownloadFileCenter;
 
 #define WHCDownloadCenter  ([WHC_DownloadFileCenter sharedWHCDownloadFileCenter])
 @interface WHC_DownloadFileCenter : NSObject
 
 + (instancetype)sharedWHCDownloadFileCenter;
+//获取下载列表
+- (NSArray *)downloadList;
 
+//是否存在取消的下载
+- (BOOL)existCancelDownload;
+
+//得到文件名格式
++ (NSString *)fileFormat:(NSString *)downloadUrl;
+
+//返回指定文件名下载对象
+- (WHC_Download *)downloadWithFileName:(NSString *)fileName;
 /**
  参数说明：
  url:下载路径
@@ -76,27 +87,27 @@
  说明：
  恢复指定暂停正下载文件名的下载并返回新下载
  */
-- (WHC_Download *)recoverDownloadWithName:(NSString *)fileName;
+- (WHC_Download *)recoverDownloadWithName:(NSString *)fileName delegate:(id)delegate;
 
 
 /**
  说明：
  恢复指暂停下载url的下载并返回新下载
  */
-- (WHC_Download *)recoverDownloadWithDownUrl:(NSURL *)downUrl;
+- (WHC_Download *)recoverDownloadWithDownUrl:(NSURL *)downUrl delegate:(id)delegate;
 
 /**
  说明：
  恢复指定暂停的下载并返回新下载
  */
 
-- (WHC_Download *)recoverDownload:(WHC_Download *)download;
+- (WHC_Download *)recoverDownload:(WHC_Download *)download delegate:(id)delegate;
 
 /**
  说明：
  恢复所有暂停的下载并返回新下载集合
  */
-- (NSArray *)recoverAllDownloadTask;
+- (NSArray *)recoverAllDownloadTaskDelegate:(id)delegate;
 
 /**
  说明：
@@ -104,7 +115,10 @@
  使用情景:(当从控制器B进入到控制器C然后在控制器C中进行下载，然后下载过程中突然退出到控制器B，
  在又进入到控制器C，这个时候还是在下载但是代理对象和之前的那个控制器C不是一个对象所以要替换)
  */
-- (void)replaceCurrentDownloadDelegate:(id)delegate fileName:(NSString *)fileName;
+- (BOOL)replaceCurrentDownloadDelegate:(id)delegate fileName:(NSString *)fileName;
+
+//替换所有当前下载代理
+- (BOOL)replaceCurrentDownloadDelegate:(id)delegate;
 
 /**
  说明：
@@ -118,4 +132,9 @@
  设置最大下载数量
  */
 - (void)setMaxDownloadCount:(NSUInteger)count;
+
+/**
+ 说明:返回下载中心最大同时下载操作个数
+ */
+- (NSInteger)maxDownloadCount;
 @end

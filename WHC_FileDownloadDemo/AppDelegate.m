@@ -14,6 +14,7 @@
  */
 
 #import "AppDelegate.h"
+#import "WHC_ClientAccount.h"
 #import "ViewController.h"
 @interface AppDelegate ()
 
@@ -25,7 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     _window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    _window.rootViewController = [ViewController new];
+    _window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[ViewController new]];
     [_window makeKeyAndVisible];
     return YES;
 }
@@ -50,6 +51,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [Account saveDownloadRecord];
 }
 
 @end

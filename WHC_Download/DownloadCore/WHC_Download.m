@@ -53,6 +53,17 @@
     return [_saveFilePath stringByAppendingString:self.saveFileName];
 }
 
+- (NSString *)downPath{
+    return self.downUrl.absoluteString;
+}
+
+- (uint64_t)downloadLen{
+    return _recvDataLen;
+}
+
+- (uint64_t)totalLen{
+    return _actualFileSizeLen;
+}
 #pragma mark - OverrideMethod
 
 - (void)start{
@@ -109,6 +120,11 @@
                                           code:GeneralErrorInfo
                                       userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:kWHC_InvainUrl,_downUrl.path]}];
     }
+    NSFileManager  * fm = [NSFileManager defaultManager];
+    if([fm fileExistsAtPath:self.saveFilePath]){
+        __autoreleasing  NSError  * error = nil;
+        [fm removeItemAtPath:self.saveFilePath error:&error];
+    }
     if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:error:)]){
         [_delegate WHCDownload:self error:error];
     }
@@ -125,6 +141,7 @@
     [self willChangeValueForKey:@"isFinished"];
     [self willChangeValueForKey:@"isCancelled"];
     [_urlConnection cancel];
+    [_fileHandle synchronizeFile];
     [_fileHandle closeFile];
     _fileHandle = nil;
     _urlConnection = nil;
@@ -146,12 +163,17 @@
 
 - (void)calculateDownloadSpeed{
     float downloadSpeed = (float)_orderTimeRecvLen / (kWHC_DownloadSpeedDuring * 1024.0);
-    _downloadSpeed = [NSString stringWithFormat:@"%.1fKB/s", downloadSpeed];
+    _downloadSpeed = [NSString stringWithFormat:@"%.1fKB/S", downloadSpeed];
     if(downloadSpeed >= 1024.0){
         downloadSpeed = ((float)_orderTimeRecvLen / 1024.0) / (kWHC_DownloadSpeedDuring * 1024.0);
-        _downloadSpeed = [NSString stringWithFormat:@"%.1fMB/s",downloadSpeed];
+        _downloadSpeed = [NSString stringWithFormat:@"%.1fMB/S",downloadSpeed];
     }
     _orderTimeRecvLen = 0;
+}
+
+- (void)dealloc{
+    _downloadComplete = YES;
+    [[NSNotificationCenter defaultCenter]postNotificationName:kWHC_DownloadDidCompleteNotification object:self];
 }
 
 #pragma mark - publicMothed
@@ -167,6 +189,7 @@
         [_fileHandle writeData:_downloadData];
         [_downloadData setData:nil];
     }
+    _downloading = NO;
     _downloadComplete = isDel;
     [self cancelledDownloadNotify];
     if(isDel){
@@ -174,15 +197,12 @@
         if([fm fileExistsAtPath:self.saveFilePath]){
             __autoreleasing  NSError  * error = nil;
             [fm removeItemAtPath:self.saveFilePath error:&error];
-            if(error){
-                [self handleDownloadError:error];
-            }else{
-                if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
-                    [_delegate WHCDownload:self filePath:_downUrl.absoluteString  isSuccess:NO];
-                }
-            }
         }
     }
+    if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
+        [_delegate WHCDownload:self filePath:_downUrl.absoluteString  isSuccess:NO];
+    }
+
 }
 
 
@@ -214,6 +234,7 @@
            __autoreleasing NSError  * error = [[NSError alloc]initWithDomain:kWHC_Domain code:FreeDiskSpaceLack userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:kWHC_FreeDiskSapceError,_actualFileSizeLen]}];
             [self handleDownloadError:error];
         }else{
+            _downloading = YES;
             _recvDataLen = _localFileSizeLen;
             _orderTimeRecvLen = 0;
             _timer = [NSTimer scheduledTimerWithTimeInterval:kWHC_DownloadSpeedDuring target:self selector:@selector(calculateDownloadSpeed) userInfo:nil repeats:YES];
@@ -229,6 +250,7 @@
         [self cancelDownloadTaskAndDelFile:NO];
     }
 }
+
 
 - (void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data{
     
@@ -250,6 +272,7 @@
         [_downloadData setData:nil];
     }
     _downloadComplete = YES;
+    _downloading = NO;
     if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
         [_delegate WHCDownload:self filePath:self.saveFilePath  isSuccess:YES];
     }

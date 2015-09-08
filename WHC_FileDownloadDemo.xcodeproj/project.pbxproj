@@ -14,10 +14,17 @@
 		C30A386D1B660BBD00A14F84 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C30A386B1B660BBD00A14F84 /* LaunchScreen.xib */; };
 		C30A38791B660BBD00A14F84 /* WHC_FileDownloadDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C30A38781B660BBD00A14F84 /* WHC_FileDownloadDemoTests.m */; };
 		C30A38831B660C1800A14F84 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C30A38821B660C1800A14F84 /* ViewController.xib */; };
-		C30A38891B66102A00A14F84 /* WHC_Download.m in Sources */ = {isa = PBXBuildFile; fileRef = C30A38861B66102A00A14F84 /* WHC_Download.m */; };
-		C30A388A1B66102A00A14F84 /* WHC_DownloadFileCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = C30A38881B66102A00A14F84 /* WHC_DownloadFileCenter.m */; };
-		C3E4E9311B673B3A00A5DFFE /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = C3E4E9301B673B3A00A5DFFE /* btn.png */; };
-		C3E4E9331B674F7600A5DFFE /* show.gif in Resources */ = {isa = PBXBuildFile; fileRef = C3E4E9321B674F7600A5DFFE /* show.gif */; };
+		C3D5D1A51B9D810D007F24C6 /* WHC_ClientAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D5D1A41B9D810D007F24C6 /* WHC_ClientAccount.m */; };
+		C3E33EA41B9E76520038F9F2 /* WHC_Download.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33E931B9E76520038F9F2 /* WHC_Download.m */; };
+		C3E33EA51B9E76520038F9F2 /* WHC_DownloadFileCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33E951B9E76520038F9F2 /* WHC_DownloadFileCenter.m */; };
+		C3E33EA61B9E76520038F9F2 /* WHC_FillScreenPlayerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33E981B9E76520038F9F2 /* WHC_FillScreenPlayerVC.m */; };
+		C3E33EA71B9E76520038F9F2 /* WHC_OffLineVideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3E33E991B9E76520038F9F2 /* WHC_OffLineVideoCell.xib */; };
+		C3E33EA81B9E76520038F9F2 /* WHC_OffLineVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33E9B1B9E76520038F9F2 /* WHC_OffLineVideoVC.m */; };
+		C3E33EA91B9E76520038F9F2 /* WHC_OffLineVideoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3E33E9C1B9E76520038F9F2 /* WHC_OffLineVideoVC.xib */; };
+		C3E33EAA1B9E76520038F9F2 /* UIView+WHC_Loading.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33E9F1B9E76520038F9F2 /* UIView+WHC_Loading.m */; };
+		C3E33EAB1B9E76520038F9F2 /* UIView+WHC_Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33EA11B9E76520038F9F2 /* UIView+WHC_Toast.m */; };
+		C3E33EAC1B9E76520038F9F2 /* UIView+WHC_ViewProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33EA31B9E76520038F9F2 /* UIView+WHC_ViewProperty.m */; };
+		C3E33EAF1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E33EAE1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.m */; };
 		C3E4E9351B674F8E00A5DFFE /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = C3E4E9341B674F8E00A5DFFE /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -45,12 +52,26 @@
 		C30A38771B660BBD00A14F84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C30A38781B660BBD00A14F84 /* WHC_FileDownloadDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WHC_FileDownloadDemoTests.m; sourceTree = "<group>"; };
 		C30A38821B660C1800A14F84 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
-		C30A38851B66102A00A14F84 /* WHC_Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_Download.h; sourceTree = "<group>"; };
-		C30A38861B66102A00A14F84 /* WHC_Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_Download.m; sourceTree = "<group>"; };
-		C30A38871B66102A00A14F84 /* WHC_DownloadFileCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_DownloadFileCenter.h; sourceTree = "<group>"; };
-		C30A38881B66102A00A14F84 /* WHC_DownloadFileCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_DownloadFileCenter.m; sourceTree = "<group>"; };
-		C3E4E9301B673B3A00A5DFFE /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn.png; sourceTree = "<group>"; };
-		C3E4E9321B674F7600A5DFFE /* show.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = show.gif; sourceTree = "<group>"; };
+		C3D5D1A31B9D810D007F24C6 /* WHC_ClientAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_ClientAccount.h; sourceTree = "<group>"; };
+		C3D5D1A41B9D810D007F24C6 /* WHC_ClientAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_ClientAccount.m; sourceTree = "<group>"; };
+		C3E33E921B9E76520038F9F2 /* WHC_Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_Download.h; sourceTree = "<group>"; };
+		C3E33E931B9E76520038F9F2 /* WHC_Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_Download.m; sourceTree = "<group>"; };
+		C3E33E941B9E76520038F9F2 /* WHC_DownloadFileCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_DownloadFileCenter.h; sourceTree = "<group>"; };
+		C3E33E951B9E76520038F9F2 /* WHC_DownloadFileCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_DownloadFileCenter.m; sourceTree = "<group>"; };
+		C3E33E971B9E76520038F9F2 /* WHC_FillScreenPlayerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_FillScreenPlayerVC.h; sourceTree = "<group>"; };
+		C3E33E981B9E76520038F9F2 /* WHC_FillScreenPlayerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_FillScreenPlayerVC.m; sourceTree = "<group>"; };
+		C3E33E991B9E76520038F9F2 /* WHC_OffLineVideoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WHC_OffLineVideoCell.xib; sourceTree = "<group>"; };
+		C3E33E9A1B9E76520038F9F2 /* WHC_OffLineVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_OffLineVideoVC.h; sourceTree = "<group>"; };
+		C3E33E9B1B9E76520038F9F2 /* WHC_OffLineVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_OffLineVideoVC.m; sourceTree = "<group>"; };
+		C3E33E9C1B9E76520038F9F2 /* WHC_OffLineVideoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WHC_OffLineVideoVC.xib; sourceTree = "<group>"; };
+		C3E33E9E1B9E76520038F9F2 /* UIView+WHC_Loading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WHC_Loading.h"; sourceTree = "<group>"; };
+		C3E33E9F1B9E76520038F9F2 /* UIView+WHC_Loading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WHC_Loading.m"; sourceTree = "<group>"; };
+		C3E33EA01B9E76520038F9F2 /* UIView+WHC_Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WHC_Toast.h"; sourceTree = "<group>"; };
+		C3E33EA11B9E76520038F9F2 /* UIView+WHC_Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WHC_Toast.m"; sourceTree = "<group>"; };
+		C3E33EA21B9E76520038F9F2 /* UIView+WHC_ViewProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WHC_ViewProperty.h"; sourceTree = "<group>"; };
+		C3E33EA31B9E76520038F9F2 /* UIView+WHC_ViewProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WHC_ViewProperty.m"; sourceTree = "<group>"; };
+		C3E33EAD1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+WHC_PullRefresh.h"; sourceTree = "<group>"; };
+		C3E33EAE1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+WHC_PullRefresh.m"; sourceTree = "<group>"; };
 		C3E4E9341B674F8E00A5DFFE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,8 +116,6 @@
 		C30A385B1B660BBD00A14F84 /* WHC_FileDownloadDemo */ = {
 			isa = PBXGroup;
 			children = (
-				C3E4E9301B673B3A00A5DFFE /* btn.png */,
-				C3E4E9321B674F7600A5DFFE /* show.gif */,
 				C30A38601B660BBD00A14F84 /* AppDelegate.h */,
 				C30A38611B660BBD00A14F84 /* AppDelegate.m */,
 				C30A38631B660BBD00A14F84 /* ViewController.h */,
@@ -138,12 +157,52 @@
 		C30A38841B66102A00A14F84 /* WHC_Download */ = {
 			isa = PBXGroup;
 			children = (
-				C30A38851B66102A00A14F84 /* WHC_Download.h */,
-				C30A38861B66102A00A14F84 /* WHC_Download.m */,
-				C30A38871B66102A00A14F84 /* WHC_DownloadFileCenter.h */,
-				C30A38881B66102A00A14F84 /* WHC_DownloadFileCenter.m */,
+				C3E33E911B9E76520038F9F2 /* DownloadCore */,
+				C3E33E961B9E76520038F9F2 /* UI */,
+				C3E33E9D1B9E76520038F9F2 /* UIUnitCore */,
+				C3D5D1A31B9D810D007F24C6 /* WHC_ClientAccount.h */,
+				C3D5D1A41B9D810D007F24C6 /* WHC_ClientAccount.m */,
 			);
 			path = WHC_Download;
+			sourceTree = "<group>";
+		};
+		C3E33E911B9E76520038F9F2 /* DownloadCore */ = {
+			isa = PBXGroup;
+			children = (
+				C3E33E921B9E76520038F9F2 /* WHC_Download.h */,
+				C3E33E931B9E76520038F9F2 /* WHC_Download.m */,
+				C3E33E941B9E76520038F9F2 /* WHC_DownloadFileCenter.h */,
+				C3E33E951B9E76520038F9F2 /* WHC_DownloadFileCenter.m */,
+			);
+			path = DownloadCore;
+			sourceTree = "<group>";
+		};
+		C3E33E961B9E76520038F9F2 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				C3E33E971B9E76520038F9F2 /* WHC_FillScreenPlayerVC.h */,
+				C3E33E981B9E76520038F9F2 /* WHC_FillScreenPlayerVC.m */,
+				C3E33E991B9E76520038F9F2 /* WHC_OffLineVideoCell.xib */,
+				C3E33E9A1B9E76520038F9F2 /* WHC_OffLineVideoVC.h */,
+				C3E33E9B1B9E76520038F9F2 /* WHC_OffLineVideoVC.m */,
+				C3E33E9C1B9E76520038F9F2 /* WHC_OffLineVideoVC.xib */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		C3E33E9D1B9E76520038F9F2 /* UIUnitCore */ = {
+			isa = PBXGroup;
+			children = (
+				C3E33E9E1B9E76520038F9F2 /* UIView+WHC_Loading.h */,
+				C3E33E9F1B9E76520038F9F2 /* UIView+WHC_Loading.m */,
+				C3E33EA01B9E76520038F9F2 /* UIView+WHC_Toast.h */,
+				C3E33EA11B9E76520038F9F2 /* UIView+WHC_Toast.m */,
+				C3E33EA21B9E76520038F9F2 /* UIView+WHC_ViewProperty.h */,
+				C3E33EA31B9E76520038F9F2 /* UIView+WHC_ViewProperty.m */,
+				C3E33EAD1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.h */,
+				C3E33EAE1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.m */,
+			);
+			path = UIUnitCore;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,10 +285,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3E33EA91B9E76520038F9F2 /* WHC_OffLineVideoVC.xib in Resources */,
+				C3E33EA71B9E76520038F9F2 /* WHC_OffLineVideoCell.xib in Resources */,
 				C30A386D1B660BBD00A14F84 /* LaunchScreen.xib in Resources */,
 				C30A38831B660C1800A14F84 /* ViewController.xib in Resources */,
-				C3E4E9331B674F7600A5DFFE /* show.gif in Resources */,
-				C3E4E9311B673B3A00A5DFFE /* btn.png in Resources */,
 				C30A386A1B660BBD00A14F84 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -248,12 +307,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3E33EAA1B9E76520038F9F2 /* UIView+WHC_Loading.m in Sources */,
+				C3E33EA81B9E76520038F9F2 /* WHC_OffLineVideoVC.m in Sources */,
+				C3E33EAF1B9E77860038F9F2 /* UIScrollView+WHC_PullRefresh.m in Sources */,
+				C3D5D1A51B9D810D007F24C6 /* WHC_ClientAccount.m in Sources */,
+				C3E33EA61B9E76520038F9F2 /* WHC_FillScreenPlayerVC.m in Sources */,
 				C3E4E9351B674F8E00A5DFFE /* README.md in Sources */,
+				C3E33EAC1B9E76520038F9F2 /* UIView+WHC_ViewProperty.m in Sources */,
+				C3E33EA41B9E76520038F9F2 /* WHC_Download.m in Sources */,
 				C30A38651B660BBD00A14F84 /* ViewController.m in Sources */,
+				C3E33EA51B9E76520038F9F2 /* WHC_DownloadFileCenter.m in Sources */,
+				C3E33EAB1B9E76520038F9F2 /* UIView+WHC_Toast.m in Sources */,
 				C30A38621B660BBD00A14F84 /* AppDelegate.m in Sources */,
-				C30A38891B66102A00A14F84 /* WHC_Download.m in Sources */,
 				C30A385F1B660BBD00A14F84 /* main.m in Sources */,
-				C30A388A1B66102A00A14F84 /* WHC_DownloadFileCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
