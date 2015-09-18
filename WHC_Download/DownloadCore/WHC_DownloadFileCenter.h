@@ -30,9 +30,6 @@
 //是否存在取消的下载
 - (BOOL)existCancelDownload;
 
-//得到文件名格式
-+ (NSString *)fileFormat:(NSString *)downloadUrl;
-
 //返回指定文件名下载对象
 - (WHC_Download *)downloadWithFileName:(NSString *)fileName;
 /**
@@ -137,4 +134,7 @@
  说明:返回下载中心最大同时下载操作个数
  */
 - (NSInteger)maxDownloadCount;
+
+//获取要下载的文件格式
+- (NSString *)fileFormat:(NSString *)downloadUrl;
 @end

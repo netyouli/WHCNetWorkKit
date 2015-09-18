@@ -114,7 +114,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
     WHC_Download  * download = nil;
     NSString * fielName = nil;
     if(savefileName){
-        NSString * format = [WHC_DownloadFileCenter fileFormat:url.absoluteString];
+        NSString * format = [self fileFormat:url.absoluteString];
         if([format isEqualToString:[NSString stringWithFormat:@".%@",[[savefileName componentsSeparatedByString:@"."] lastObject]]]){
             fielName = savefileName;
         }else{
@@ -346,9 +346,8 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
     return downloadArr;
 }
 
-#pragma mark - privateMothed
-
-+ (NSString *)fileFormat:(NSString *)downloadUrl{
+//获取要下载的文件格式
+- (NSString *)fileFormat:(NSString *)downloadUrl{
     NSArray  * strArr = [downloadUrl componentsSeparatedByString:@"."];
     if(strArr && strArr.count > 0){
         return [NSString stringWithFormat:@".%@",strArr.lastObject];
@@ -356,6 +355,9 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
         return nil;
     }
 }
+
+#pragma mark - privateMothed
+
 
 - (BOOL)createFileSavePath:(NSString *)savePath{
     BOOL  result = YES;

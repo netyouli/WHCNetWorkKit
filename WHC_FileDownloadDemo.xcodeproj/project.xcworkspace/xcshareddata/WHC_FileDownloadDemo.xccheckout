@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>477168BD-F053-4A4E-85CA-F65A49ABE466</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>WHC_FileDownloadDemo</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>1BD6F223C6301A69832A99847A41F66F14CCB4FA</key>
 		<string>https://github.com/netyouli/WHC_FileDownloadDemo.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>WHC_FileDownloadDemo.xcodeproj/project.xcworkspace</string>
+	<string>WHC_FileDownloadDemo.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>1BD6F223C6301A69832A99847A41F66F14CCB4FA</key>
