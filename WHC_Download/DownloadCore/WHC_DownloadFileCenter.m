@@ -122,7 +122,7 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
         }
     }
     for (WHC_Download * tempDownload in _WHCDownloadQueue.operations) {
-        if ([url.absoluteString isEqualToString:tempDownload.downPath]){
+        if ([fielName isEqualToString:tempDownload.saveFileName]){
             if(delegate && [delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
                 [delegate WHCDownload:tempDownload filePath:savePath hasACompleteDownload:YES];
             }

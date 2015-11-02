@@ -125,10 +125,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     NSString * fileName = [NSString stringWithFormat:@"%@%@",_fileNameArr[indexPath.row],[WHCDownloadCenter fileFormat:kWHC_DefaultDownloadUrl]];
-    if([Account downloadStateVoideFile:fileName]){
-        [self.view toast:@"该视频已在个人中心离线视频中"];
-        return;
-    }
     if([WHCDownloadCenter downloadList].count < [WHCDownloadCenter maxDownloadCount]){
         [self.view startLoading];
         self.navigationController.navigationBar.userInteractionEnabled = NO;
