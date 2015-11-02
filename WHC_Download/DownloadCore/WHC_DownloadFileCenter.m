@@ -121,6 +121,14 @@ static  WHC_DownloadFileCenter  * downloadFileCenter = nil;
             fielName = [NSString stringWithFormat:@"%@%@",savefileName,format];
         }
     }
+    for (WHC_Download * tempDownload in _WHCDownloadQueue.operations) {
+        if ([url.absoluteString isEqualToString:tempDownload.downPath]){
+            if(delegate && [delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
+                [delegate WHCDownload:tempDownload filePath:savePath hasACompleteDownload:YES];
+            }
+            return tempDownload;
+        }
+    }
     if([self createFileSavePath:savePath]){
         download = [WHC_Download new];
         download.delegate = delegate;

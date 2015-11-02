@@ -21,7 +21,7 @@
 #import "UIScrollView+WHC_PullRefresh.h"
 
 #define kWHC_CellName             (@"WHC：视频下载文件")
-#define kWHC_DefaultDownloadUrl   (@"http://s.dingboshi.cn:8080/school/file/201507/resource/79e01f8be9db444291257b067ccffbc7.mp4")
+#define kWHC_DefaultDownloadUrl   (@"http://newmp4.68mtv.com/%E4%BD%99%E6%B6%9F-%E8%B5%B0%E8%BF%9B%E8%A5%BF%E5%A1%98[68mtv.com].mp4")
 @interface ViewController ()<WHCDownloadDelegate,WHC_PullRefreshDelegate>{
     NSMutableArray  *  _fileNameArr;
 }

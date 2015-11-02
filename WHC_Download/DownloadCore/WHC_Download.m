@@ -76,21 +76,25 @@
         NSFileManager  * fm = [NSFileManager defaultManager];
         if(![fm fileExistsAtPath:self.saveFilePath]){
             [fm createFileAtPath:self.saveFilePath contents:nil attributes:nil];
-        }
-        _localFileSizeLen = [[fm attributesOfItemAtPath:self.saveFilePath error:&error] fileSize];
-        if(error == nil){
+        }else {
+            _localFileSizeLen = [[fm attributesOfItemAtPath:self.saveFilePath error:&error] fileSize];
             NSString  * strRange = [NSString stringWithFormat:kWHC_RequestRange ,_localFileSizeLen];
             [urlRequest setValue:strRange forHTTPHeaderField:@"Range"];
+        }
+        
+        if(error == nil){
             _fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.saveFilePath];
             [_fileHandle seekToEndOfFile];
             _downloadData = [NSMutableData new];
             if(_urlConnection == nil){
                 _urlConnection = [[NSURLConnection alloc]initWithRequest:urlRequest delegate:self startImmediately:NO];
             }
-            [_urlConnection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+            NSRunLoop * urnLoop = [NSRunLoop currentRunLoop];
+            [_urlConnection scheduleInRunLoop:urnLoop forMode:NSDefaultRunLoopMode];
             [self willChangeValueForKey:@"isExecuting"];
             [_urlConnection start];
             [self didChangeValueForKey:@"isExecuting"];
+            [urnLoop run];
         }else{
             NSLog(kWHC_calculateFolderSpaceAvailableFailTxt);
         }
@@ -125,9 +129,11 @@
         __autoreleasing  NSError  * error = nil;
         [fm removeItemAtPath:self.saveFilePath error:&error];
     }
-    if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:error:)]){
-        [_delegate WHCDownload:self error:error];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:error:)]){
+            [_delegate WHCDownload:self error:error];
+        }
+    });
 }
 
 - (void)cancelledDownloadNotify{
@@ -199,9 +205,11 @@
             [fm removeItemAtPath:self.saveFilePath error:&error];
         }
     }
-    if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
-        [_delegate WHCDownload:self filePath:_downUrl.absoluteString  isSuccess:NO];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
+            [_delegate WHCDownload:self filePath:_downUrl.absoluteString  isSuccess:NO];
+        }
+    });
 
 }
 
@@ -221,9 +229,11 @@
         if(headerResponse.statusCode == 416){
             _downloadComplete = YES;
             [self cancelledDownloadNotify];
-            if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
-                [_delegate WHCDownload:self filePath:self.saveFilePath hasACompleteDownload:YES];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
+                    [_delegate WHCDownload:self filePath:self.saveFilePath hasACompleteDownload:YES];
+                }
+            });
             return;
         }else{
             __autoreleasing NSError  * error = [[NSError alloc]initWithDomain:kWHC_Domain code:NetWorkErrorInfo userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:kWHC_ErrorCode,(long)headerResponse.statusCode]}];
@@ -240,9 +250,11 @@
             _timer = [NSTimer scheduledTimerWithTimeInterval:kWHC_DownloadSpeedDuring target:self selector:@selector(calculateDownloadSpeed) userInfo:nil repeats:YES];
             isCancel = NO;
             [_downloadData setData:nil];
-            if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
-                [_delegate WHCDownload:self filePath:self.saveFilePath hasACompleteDownload:NO];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:hasACompleteDownload:)]){
+                    [_delegate WHCDownload:self filePath:self.saveFilePath hasACompleteDownload:NO];
+                }
+            });
             [self calculateDownloadSpeed];
         }
     }
@@ -261,9 +273,11 @@
         [_fileHandle writeData:_downloadData];
         [_downloadData setData:nil];
     }
-    if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:didReceivedLen:totalLen:networkSpeed:)]){
-        [_delegate WHCDownload:self didReceivedLen:_recvDataLen totalLen:_actualFileSizeLen networkSpeed:_downloadSpeed];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:didReceivedLen:totalLen:networkSpeed:)]){
+            [_delegate WHCDownload:self didReceivedLen:_recvDataLen totalLen:_actualFileSizeLen networkSpeed:_downloadSpeed];
+        }
+    });
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection*)connection{
@@ -273,9 +287,11 @@
     }
     _downloadComplete = YES;
     _downloading = NO;
-    if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
-        [_delegate WHCDownload:self filePath:self.saveFilePath  isSuccess:YES];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(_delegate && [_delegate respondsToSelector:@selector(WHCDownload:filePath:isSuccess:)]){
+            [_delegate WHCDownload:self filePath:self.saveFilePath  isSuccess:YES];
+        }
+    });
     [self cancelledDownloadNotify];
 }
 @end
