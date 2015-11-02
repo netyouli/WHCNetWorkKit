@@ -479,11 +479,10 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     DownloadObject * object = _videoObjectArr[indexPath.row];
-    NSString       * videoFilePath = [NSString stringWithFormat:@"%@%@",Account.videoFolder,object.fileName];
-    NSFileManager  * fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:videoFilePath error:nil];
+    [WHCDownloadCenter cancelDownloadWithFileName:object.fileName delFile:YES];
     [_videoObjectArr removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    
     NSMutableDictionary * downloadRecordDict = [NSMutableDictionary dictionaryWithContentsOfFile:_plistPath];
     NSDictionary * tempDict = downloadRecordDict[object.fileName];
     if(tempDict){
