@@ -8,7 +8,7 @@
 #具体使用方式请下载demo阅读里面很详细
 
 ##运行效果
-![](https://github.com/netyouli/WHC_FileDownloadDemo/tree/master/WHC_FileDownloadDemo/show.gif)
+![](https://github.com/netyouli/WHC_FileDownloadDemo/blob/master/WHC_FileDownloadDemo/show.gif)
 
 ####Use Example
 ```objective-c
