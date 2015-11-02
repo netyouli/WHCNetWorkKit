@@ -41,7 +41,7 @@ typedef enum:NSInteger{
 
 @interface WHC_Download : NSOperation
 
-@property (nonatomic , assign)id<WHCDownloadDelegate>delegate;
+@property (nonatomic , weak)id<WHCDownloadDelegate>delegate;
 @property (nonatomic , retain)NSString       *   saveFilePath;      //文件名路径
 @property (nonatomic , retain)NSString       *   saveFileName;      //文件名
 @property (nonatomic , retain)NSURL          *   downUrl;           //下载地址
