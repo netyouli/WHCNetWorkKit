@@ -17,7 +17,7 @@ FOUNDATION_EXPORT const unsigned char WHCNetWorkKitVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <WHCNetWorkKit/PublicHeader.h>
 
 
-#import <WHCNetWorkKit/NSURLConnection/WHC_HttpManager.h>
+#import <WHCNetWorkKit/WHC_HttpManager.h>
 #import <WHCNetWorkKit/WHC_SessionDownloadManager.h>
 #import <WHCNetWorkKit/UIButton+WHC_HttpButton.h>
 #import <WHCNetWorkKit/UIImageView+WHC_HttpImageView.h>

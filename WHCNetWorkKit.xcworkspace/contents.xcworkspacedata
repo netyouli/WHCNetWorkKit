@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:WHCNetWorkKit/WHCNetWorkKit.xcodeproj">
+      location = "group:WHCNetWorkKit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:WHCNetWorkKit Example/WHCNetWorkKit Example.xcodeproj">
+      location = "group:WHCNetWorkKit Example.xcodeproj">
    </FileRef>
 </Workspace>
