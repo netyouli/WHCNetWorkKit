@@ -24,6 +24,10 @@
 
 @import WHCNetWorkKit;
 
+#import <WHCNetWorkKit/WHC_HttpManager.h>
+#import <WHCNetWorkKit/UIButton+WHC_HttpButton.h>
+#import <WHCNetWorkKit/UIImageView+WHC_HttpImageView.h>
+
 #define kWHC_CellName             (@"WHC：视频下载文件")
 #define kWHC_DefaultDownloadUrl   (@"http://dlsw.baidu.com/sw-search-sp/soft/3b/29082/ykkhdmacb0.9.1438938315.dmg")
 
@@ -69,6 +73,46 @@
 - (void)alert:(NSString *)msg{
     UIAlertView  * alert = [[UIAlertView alloc]initWithTitle:msg message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
+    
+    [[WHC_HttpManager shared] get:@"http://www.baidu.com/"
+                      didFinished:^(WHC_BaseOperation *operation,
+                                    NSData *data,
+                                    NSError *error,
+                                    BOOL isSuccess) {
+        
+    }];
+    
+    [[WHC_HttpManager shared] post:@"http://www.baidu.com"
+                             param:@"whc"
+                       didFinished:^(WHC_BaseOperation *operation, NSData *data, NSError *error, BOOL isSuccess) {
+        
+    }];
+    
+    //上传5个文件
+    for (int i = 0; i < 5; i++) {
+        UIImage * image = [UIImage imageNamed:@"whc"];
+        NSData * imageData = UIImageJPEGRepresentation(image, 0.5);
+        [[WHC_HttpManager shared] addUploadFileData:imageData withFileName:[NSString stringWithFormat:@"image%d",i] mimeType:@"image/jpep" forKey:@"file"];
+    }
+    [[WHC_HttpManager shared] upload:@"http://www.baidu.com"
+                               param:@"param" didFinished:^(WHC_BaseOperation *operation,
+                                                            NSData *data,
+                                                            NSError *error,
+                                                            BOOL isSuccess) {
+        
+    }];
+    
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button whc_setBackgroundImageWithURL:@"http://www.baidu.com" forState:UIControlStateNormal];
+    [button whc_setBackgroundImageWithURL:@"http://www.baidu.com" forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"whc"]];
+    [button whc_setImageWithUrl:@"http://www.baidu.com" forState:UIControlStateNormal];
+    [button whc_setImageWithUrl:@"http://www.baidu.com" forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"whc"]];
+    
+    UIImageView * imageView = [UIImageView new];
+    [imageView whc_setImageWithUrl:@"http://www.baidu.com"];
+    [imageView whc_setImageWithUrl:@"http://www.baidu.com" placeholderImage:[UIImage imageNamed:@"whc"]];
+   
 }
 
 #pragma mark - 上拉下拉刷新代理
