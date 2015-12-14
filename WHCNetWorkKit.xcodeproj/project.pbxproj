@@ -1,0 +1,547 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3A7FC231C1BFC1800C3EAE0 /* WHCNetWorkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C3A7FC221C1BFC1800C3EAE0 /* WHCNetWorkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA90D1C1BC9D900C08B80 /* WHCNetWorkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FFA9021C1BC9D900C08B80 /* WHCNetWorkKit.framework */; };
+		C3FFA9121C1BC9D900C08B80 /* WHCNetWorkKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9111C1BC9D900C08B80 /* WHCNetWorkKitTests.m */; };
+		C3FFA93E1C1BCA1100C08B80 /* WHC_BaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA91D1C1BCA1100C08B80 /* WHC_BaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA93F1C1BCA1100C08B80 /* WHC_BaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA91E1C1BCA1100C08B80 /* WHC_BaseOperation.m */; };
+		C3FFA9401C1BCA1100C08B80 /* WHC_DownloadOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA91F1C1BCA1100C08B80 /* WHC_DownloadOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9411C1BCA1100C08B80 /* WHC_DownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9201C1BCA1100C08B80 /* WHC_DownloadOperation.m */; };
+		C3FFA9421C1BCA1100C08B80 /* WHC_HttpManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9211C1BCA1100C08B80 /* WHC_HttpManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9431C1BCA1100C08B80 /* WHC_HttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9221C1BCA1100C08B80 /* WHC_HttpManager.m */; };
+		C3FFA9441C1BCA1100C08B80 /* WHC_HttpOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9231C1BCA1100C08B80 /* WHC_HttpOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9451C1BCA1100C08B80 /* WHC_HttpOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9241C1BCA1100C08B80 /* WHC_HttpOperation.m */; };
+		C3FFA9461C1BCA1100C08B80 /* WHC_DownloadSessionTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9261C1BCA1100C08B80 /* WHC_DownloadSessionTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9471C1BCA1100C08B80 /* WHC_DownloadSessionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9271C1BCA1100C08B80 /* WHC_DownloadSessionTask.m */; };
+		C3FFA9481C1BCA1100C08B80 /* WHC_SessionDownloadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9281C1BCA1100C08B80 /* WHC_SessionDownloadManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9491C1BCA1100C08B80 /* WHC_SessionDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9291C1BCA1100C08B80 /* WHC_SessionDownloadManager.m */; };
+		C3FFA94A1C1BCA1100C08B80 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA92B1C1BCA1100C08B80 /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA94B1C1BCA1100C08B80 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA92C1C1BCA1100C08B80 /* Reachability.m */; };
+		C3FFA94C1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA92E1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA94D1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA92F1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.m */; };
+		C3FFA94E1C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9301C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA94F1C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9311C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.m */; };
+		C3FFA9501C1BCA1100C08B80 /* WHC_ImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9321C1BCA1100C08B80 /* WHC_ImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9511C1BCA1100C08B80 /* WHC_ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9331C1BCA1100C08B80 /* WHC_ImageCache.m */; };
+		C3FFA9741C1BCB3200C08B80 /* WHC_DataModel.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA96C1C1BCB3200C08B80 /* WHC_DataModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9751C1BCB3200C08B80 /* WHC_DataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA96D1C1BCB3200C08B80 /* WHC_DataModel.m */; };
+		C3FFA9761C1BCB3200C08B80 /* WHC_Json.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA96E1C1BCB3200C08B80 /* WHC_Json.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9771C1BCB3200C08B80 /* WHC_Json.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA96F1C1BCB3200C08B80 /* WHC_Json.m */; };
+		C3FFA9781C1BCB3200C08B80 /* WHC_Xml.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9701C1BCB3200C08B80 /* WHC_Xml.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA9791C1BCB3200C08B80 /* WHC_Xml.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9711C1BCB3200C08B80 /* WHC_Xml.m */; };
+		C3FFA97A1C1BCB3200C08B80 /* WHC_XMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = C3FFA9721C1BCB3200C08B80 /* WHC_XMLParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3FFA97B1C1BCB3200C08B80 /* WHC_XMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FFA9731C1BCB3200C08B80 /* WHC_XMLParser.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C3FFA90E1C1BC9D900C08B80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3FFA8F91C1BC9D900C08B80 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C3FFA9011C1BC9D900C08B80;
+			remoteInfo = WHCNetWorkKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C3A7FC221C1BFC1800C3EAE0 /* WHCNetWorkKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHCNetWorkKit.h; sourceTree = "<group>"; };
+		C3FFA9021C1BC9D900C08B80 /* WHCNetWorkKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WHCNetWorkKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3FFA9071C1BC9D900C08B80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C3FFA90C1C1BC9D900C08B80 /* WHCNetWorkKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WHCNetWorkKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3FFA9111C1BC9D900C08B80 /* WHCNetWorkKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WHCNetWorkKitTests.m; sourceTree = "<group>"; };
+		C3FFA9131C1BC9D900C08B80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C3FFA91D1C1BCA1100C08B80 /* WHC_BaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_BaseOperation.h; sourceTree = "<group>"; };
+		C3FFA91E1C1BCA1100C08B80 /* WHC_BaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_BaseOperation.m; sourceTree = "<group>"; };
+		C3FFA91F1C1BCA1100C08B80 /* WHC_DownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_DownloadOperation.h; sourceTree = "<group>"; };
+		C3FFA9201C1BCA1100C08B80 /* WHC_DownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_DownloadOperation.m; sourceTree = "<group>"; };
+		C3FFA9211C1BCA1100C08B80 /* WHC_HttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_HttpManager.h; sourceTree = "<group>"; };
+		C3FFA9221C1BCA1100C08B80 /* WHC_HttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_HttpManager.m; sourceTree = "<group>"; };
+		C3FFA9231C1BCA1100C08B80 /* WHC_HttpOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_HttpOperation.h; sourceTree = "<group>"; };
+		C3FFA9241C1BCA1100C08B80 /* WHC_HttpOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_HttpOperation.m; sourceTree = "<group>"; };
+		C3FFA9261C1BCA1100C08B80 /* WHC_DownloadSessionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_DownloadSessionTask.h; sourceTree = "<group>"; };
+		C3FFA9271C1BCA1100C08B80 /* WHC_DownloadSessionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_DownloadSessionTask.m; sourceTree = "<group>"; };
+		C3FFA9281C1BCA1100C08B80 /* WHC_SessionDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_SessionDownloadManager.h; sourceTree = "<group>"; };
+		C3FFA9291C1BCA1100C08B80 /* WHC_SessionDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_SessionDownloadManager.m; sourceTree = "<group>"; };
+		C3FFA92B1C1BCA1100C08B80 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C3FFA92C1C1BCA1100C08B80 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C3FFA92E1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+WHC_HttpButton.h"; sourceTree = "<group>"; };
+		C3FFA92F1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+WHC_HttpButton.m"; sourceTree = "<group>"; };
+		C3FFA9301C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+WHC_HttpImageView.h"; sourceTree = "<group>"; };
+		C3FFA9311C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WHC_HttpImageView.m"; sourceTree = "<group>"; };
+		C3FFA9321C1BCA1100C08B80 /* WHC_ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_ImageCache.h; sourceTree = "<group>"; };
+		C3FFA9331C1BCA1100C08B80 /* WHC_ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_ImageCache.m; sourceTree = "<group>"; };
+		C3FFA96C1C1BCB3200C08B80 /* WHC_DataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_DataModel.h; sourceTree = "<group>"; };
+		C3FFA96D1C1BCB3200C08B80 /* WHC_DataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_DataModel.m; sourceTree = "<group>"; };
+		C3FFA96E1C1BCB3200C08B80 /* WHC_Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_Json.h; sourceTree = "<group>"; };
+		C3FFA96F1C1BCB3200C08B80 /* WHC_Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_Json.m; sourceTree = "<group>"; };
+		C3FFA9701C1BCB3200C08B80 /* WHC_Xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_Xml.h; sourceTree = "<group>"; };
+		C3FFA9711C1BCB3200C08B80 /* WHC_Xml.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_Xml.m; sourceTree = "<group>"; };
+		C3FFA9721C1BCB3200C08B80 /* WHC_XMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHC_XMLParser.h; sourceTree = "<group>"; };
+		C3FFA9731C1BCB3200C08B80 /* WHC_XMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHC_XMLParser.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C3FFA8FE1C1BC9D900C08B80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C3FFA9091C1BC9D900C08B80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FFA90D1C1BC9D900C08B80 /* WHCNetWorkKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C3FFA8F81C1BC9D900C08B80 = {
+			isa = PBXGroup;
+			children = (
+				C3FFA9041C1BC9D900C08B80 /* WHCNetWorkKit */,
+				C3FFA9101C1BC9D900C08B80 /* WHCNetWorkKitTests */,
+				C3FFA9031C1BC9D900C08B80 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3FFA9031C1BC9D900C08B80 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA9021C1BC9D900C08B80 /* WHCNetWorkKit.framework */,
+				C3FFA90C1C1BC9D900C08B80 /* WHCNetWorkKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3FFA9041C1BC9D900C08B80 /* WHCNetWorkKit */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA91C1C1BCA1100C08B80 /* NSURLConnection */,
+				C3FFA9251C1BCA1100C08B80 /* NSURLSession */,
+				C3FFA92A1C1BCA1100C08B80 /* Reachability */,
+				C3FFA92D1C1BCA1100C08B80 /* UIKit+WHCNetWorkKit */,
+				C3FFA96B1C1BCB3200C08B80 /* UtilKit+WHCNetWorkKit */,
+				C3FFA9071C1BC9D900C08B80 /* Info.plist */,
+				C3A7FC221C1BFC1800C3EAE0 /* WHCNetWorkKit.h */,
+			);
+			path = WHCNetWorkKit;
+			sourceTree = "<group>";
+		};
+		C3FFA9101C1BC9D900C08B80 /* WHCNetWorkKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA9111C1BC9D900C08B80 /* WHCNetWorkKitTests.m */,
+				C3FFA9131C1BC9D900C08B80 /* Info.plist */,
+			);
+			path = WHCNetWorkKitTests;
+			sourceTree = "<group>";
+		};
+		C3FFA91C1C1BCA1100C08B80 /* NSURLConnection */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA91D1C1BCA1100C08B80 /* WHC_BaseOperation.h */,
+				C3FFA91E1C1BCA1100C08B80 /* WHC_BaseOperation.m */,
+				C3FFA91F1C1BCA1100C08B80 /* WHC_DownloadOperation.h */,
+				C3FFA9201C1BCA1100C08B80 /* WHC_DownloadOperation.m */,
+				C3FFA9211C1BCA1100C08B80 /* WHC_HttpManager.h */,
+				C3FFA9221C1BCA1100C08B80 /* WHC_HttpManager.m */,
+				C3FFA9231C1BCA1100C08B80 /* WHC_HttpOperation.h */,
+				C3FFA9241C1BCA1100C08B80 /* WHC_HttpOperation.m */,
+			);
+			path = NSURLConnection;
+			sourceTree = "<group>";
+		};
+		C3FFA9251C1BCA1100C08B80 /* NSURLSession */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA9261C1BCA1100C08B80 /* WHC_DownloadSessionTask.h */,
+				C3FFA9271C1BCA1100C08B80 /* WHC_DownloadSessionTask.m */,
+				C3FFA9281C1BCA1100C08B80 /* WHC_SessionDownloadManager.h */,
+				C3FFA9291C1BCA1100C08B80 /* WHC_SessionDownloadManager.m */,
+			);
+			path = NSURLSession;
+			sourceTree = "<group>";
+		};
+		C3FFA92A1C1BCA1100C08B80 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA92B1C1BCA1100C08B80 /* Reachability.h */,
+				C3FFA92C1C1BCA1100C08B80 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
+		C3FFA92D1C1BCA1100C08B80 /* UIKit+WHCNetWorkKit */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA92E1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.h */,
+				C3FFA92F1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.m */,
+				C3FFA9301C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.h */,
+				C3FFA9311C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.m */,
+				C3FFA9321C1BCA1100C08B80 /* WHC_ImageCache.h */,
+				C3FFA9331C1BCA1100C08B80 /* WHC_ImageCache.m */,
+			);
+			path = "UIKit+WHCNetWorkKit";
+			sourceTree = "<group>";
+		};
+		C3FFA96B1C1BCB3200C08B80 /* UtilKit+WHCNetWorkKit */ = {
+			isa = PBXGroup;
+			children = (
+				C3FFA96C1C1BCB3200C08B80 /* WHC_DataModel.h */,
+				C3FFA96D1C1BCB3200C08B80 /* WHC_DataModel.m */,
+				C3FFA96E1C1BCB3200C08B80 /* WHC_Json.h */,
+				C3FFA96F1C1BCB3200C08B80 /* WHC_Json.m */,
+				C3FFA9701C1BCB3200C08B80 /* WHC_Xml.h */,
+				C3FFA9711C1BCB3200C08B80 /* WHC_Xml.m */,
+				C3FFA9721C1BCB3200C08B80 /* WHC_XMLParser.h */,
+				C3FFA9731C1BCB3200C08B80 /* WHC_XMLParser.m */,
+			);
+			path = "UtilKit+WHCNetWorkKit";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C3FFA8FF1C1BC9D900C08B80 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FFA9741C1BCB3200C08B80 /* WHC_DataModel.h in Headers */,
+				C3FFA9501C1BCA1100C08B80 /* WHC_ImageCache.h in Headers */,
+				C3FFA9481C1BCA1100C08B80 /* WHC_SessionDownloadManager.h in Headers */,
+				C3FFA97A1C1BCB3200C08B80 /* WHC_XMLParser.h in Headers */,
+				C3FFA9441C1BCA1100C08B80 /* WHC_HttpOperation.h in Headers */,
+				C3FFA9401C1BCA1100C08B80 /* WHC_DownloadOperation.h in Headers */,
+				C3FFA93E1C1BCA1100C08B80 /* WHC_BaseOperation.h in Headers */,
+				C3FFA9781C1BCB3200C08B80 /* WHC_Xml.h in Headers */,
+				C3FFA94C1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.h in Headers */,
+				C3FFA9461C1BCA1100C08B80 /* WHC_DownloadSessionTask.h in Headers */,
+				C3FFA94A1C1BCA1100C08B80 /* Reachability.h in Headers */,
+				C3FFA9421C1BCA1100C08B80 /* WHC_HttpManager.h in Headers */,
+				C3FFA94E1C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.h in Headers */,
+				C3FFA9761C1BCB3200C08B80 /* WHC_Json.h in Headers */,
+				C3A7FC231C1BFC1800C3EAE0 /* WHCNetWorkKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C3FFA9011C1BC9D900C08B80 /* WHCNetWorkKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3FFA9161C1BC9D900C08B80 /* Build configuration list for PBXNativeTarget "WHCNetWorkKit" */;
+			buildPhases = (
+				C3FFA8FD1C1BC9D900C08B80 /* Sources */,
+				C3FFA8FE1C1BC9D900C08B80 /* Frameworks */,
+				C3FFA8FF1C1BC9D900C08B80 /* Headers */,
+				C3FFA9001C1BC9D900C08B80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WHCNetWorkKit;
+			productName = WHCNetWorkKit;
+			productReference = C3FFA9021C1BC9D900C08B80 /* WHCNetWorkKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C3FFA90B1C1BC9D900C08B80 /* WHCNetWorkKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3FFA9191C1BC9D900C08B80 /* Build configuration list for PBXNativeTarget "WHCNetWorkKitTests" */;
+			buildPhases = (
+				C3FFA9081C1BC9D900C08B80 /* Sources */,
+				C3FFA9091C1BC9D900C08B80 /* Frameworks */,
+				C3FFA90A1C1BC9D900C08B80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C3FFA90F1C1BC9D900C08B80 /* PBXTargetDependency */,
+			);
+			name = WHCNetWorkKitTests;
+			productName = WHCNetWorkKitTests;
+			productReference = C3FFA90C1C1BC9D900C08B80 /* WHCNetWorkKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3FFA8F91C1BC9D900C08B80 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "吴海超";
+				TargetAttributes = {
+					C3FFA9011C1BC9D900C08B80 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+					C3FFA90B1C1BC9D900C08B80 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+				};
+			};
+			buildConfigurationList = C3FFA8FC1C1BC9D900C08B80 /* Build configuration list for PBXProject "WHCNetWorkKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C3FFA8F81C1BC9D900C08B80;
+			productRefGroup = C3FFA9031C1BC9D900C08B80 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C3FFA9011C1BC9D900C08B80 /* WHCNetWorkKit */,
+				C3FFA90B1C1BC9D900C08B80 /* WHCNetWorkKitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C3FFA9001C1BC9D900C08B80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C3FFA90A1C1BC9D900C08B80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C3FFA8FD1C1BC9D900C08B80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FFA9771C1BCB3200C08B80 /* WHC_Json.m in Sources */,
+				C3FFA9451C1BCA1100C08B80 /* WHC_HttpOperation.m in Sources */,
+				C3FFA9511C1BCA1100C08B80 /* WHC_ImageCache.m in Sources */,
+				C3FFA9431C1BCA1100C08B80 /* WHC_HttpManager.m in Sources */,
+				C3FFA9471C1BCA1100C08B80 /* WHC_DownloadSessionTask.m in Sources */,
+				C3FFA97B1C1BCB3200C08B80 /* WHC_XMLParser.m in Sources */,
+				C3FFA94F1C1BCA1100C08B80 /* UIImageView+WHC_HttpImageView.m in Sources */,
+				C3FFA94B1C1BCA1100C08B80 /* Reachability.m in Sources */,
+				C3FFA9751C1BCB3200C08B80 /* WHC_DataModel.m in Sources */,
+				C3FFA9491C1BCA1100C08B80 /* WHC_SessionDownloadManager.m in Sources */,
+				C3FFA9411C1BCA1100C08B80 /* WHC_DownloadOperation.m in Sources */,
+				C3FFA9791C1BCB3200C08B80 /* WHC_Xml.m in Sources */,
+				C3FFA94D1C1BCA1100C08B80 /* UIButton+WHC_HttpButton.m in Sources */,
+				C3FFA93F1C1BCA1100C08B80 /* WHC_BaseOperation.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C3FFA9081C1BC9D900C08B80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3FFA9121C1BC9D900C08B80 /* WHCNetWorkKitTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C3FFA90F1C1BC9D900C08B80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C3FFA9011C1BC9D900C08B80 /* WHCNetWorkKit */;
+			targetProxy = C3FFA90E1C1BC9D900C08B80 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C3FFA9141C1BC9D900C08B80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C3FFA9151C1BC9D900C08B80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C3FFA9171C1BC9D900C08B80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = WHCNetWorkKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "---.WHCNetWorkKit";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C3FFA9181C1BC9D900C08B80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = WHCNetWorkKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "---.WHCNetWorkKit";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		C3FFA91A1C1BC9D900C08B80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = WHCNetWorkKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "---.WHCNetWorkKitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C3FFA91B1C1BC9D900C08B80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = WHCNetWorkKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "---.WHCNetWorkKitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3FFA8FC1C1BC9D900C08B80 /* Build configuration list for PBXProject "WHCNetWorkKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3FFA9141C1BC9D900C08B80 /* Debug */,
+				C3FFA9151C1BC9D900C08B80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3FFA9161C1BC9D900C08B80 /* Build configuration list for PBXNativeTarget "WHCNetWorkKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3FFA9171C1BC9D900C08B80 /* Debug */,
+				C3FFA9181C1BC9D900C08B80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3FFA9191C1BC9D900C08B80 /* Build configuration list for PBXNativeTarget "WHCNetWorkKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3FFA91A1C1BC9D900C08B80 /* Debug */,
+				C3FFA91B1C1BC9D900C08B80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3FFA8F91C1BC9D900C08B80 /* Project object */;
+}
