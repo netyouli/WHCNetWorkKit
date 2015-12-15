@@ -24,6 +24,26 @@
 /**
  * 说明: dictionary对象转换为json字符串
  */
-+ (NSString*)jsonWithDictionary:(NSDictionary*)dictionary;
++ (NSString *)jsonWithDictionary:(NSDictionary*)dictionary;
+
+/**
+ * 说明: jsonData对象转换为NSDictionary对象
+ */
++ (NSDictionary *)dictionaryWithJsonData:(NSData *)jsonData;
+
+/**
+ * 说明: json字符串对象转换为NSDictionary对象
+ */
++ (NSDictionary *)dictionaryWithJson:(NSString *)json;
+
+/**
+ * 说明: jsonData对象转换为NSArray对象
+ */
++ (NSArray *)arrayWithJsonData:(NSData *)jsonData;
+
+/**
+ * 说明: json字符串对象转换为NSArray对象
+ */
++ (NSArray *)arrayWithJson:(NSString *)json;
 
 @end

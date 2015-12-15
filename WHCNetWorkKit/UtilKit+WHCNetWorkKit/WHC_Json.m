@@ -31,10 +31,34 @@
     return self;
 }
 
-+ (NSString*)jsonWithDictionary:(NSDictionary*)dictionary{
++ (NSString*)jsonWithDictionary:(NSDictionary *)dictionary{
+    assert(dictionary);
     WHC_Json  * whcJson = [WHC_Json new];
     return [NSString stringWithFormat:@"%@}",[whcJson handleDictionaryEngine:dictionary]];
 }
+
++ (NSDictionary *)dictionaryWithJsonData:(NSData *)jsonData {
+    assert(jsonData);
+    return [NSJSONSerialization JSONObjectWithData:jsonData
+                                           options:NSJSONReadingAllowFragments error:nil];
+}
+
++ (NSDictionary *)dictionaryWithJson:(NSString *)json {
+    assert(json);
+    return [WHC_Json dictionaryWithJsonData:[json dataUsingEncoding:NSUTF8StringEncoding]];
+}
+
++ (NSArray *)arrayWithJsonData:(NSData *)jsonData {
+    assert(jsonData);
+    return [NSJSONSerialization JSONObjectWithData:jsonData
+                                           options:NSJSONReadingAllowFragments error:nil];
+}
+
++ (NSArray *)arrayWithJson:(NSString *)json {
+    assert(json);
+    return [WHC_Json dictionaryWithJsonData:[json dataUsingEncoding:NSUTF8StringEncoding]];
+}
+
 
 - (NSString*)handleDictionaryEngine:(id)object{
     if([object isKindOfClass:[NSDictionary class]]){
