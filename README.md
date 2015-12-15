@@ -20,7 +20,8 @@
     return YES;
 }
 
-/// 在其他地方可以这样[WHC_HttpManager shared].networkStatus获取当前网络状态（该网络库每次进行请求都自动处理了网络状态不需要用户进行判断）
+/// 在其他地方可以这样[WHC_HttpManager shared].networkStatus获取当前网络状态
+   （该网络库每次进行请求都自动处理了网络状态不需要用户进行判断）
 switch ([WHC_HttpManager shared].networkStatus) {
     case NotReachable:{
         [[[UIAlertView alloc]initWithTitle:nil
@@ -175,7 +176,7 @@ UIImageView * imageView = [UIImageView new];
 
 ###Json 转模型类  Use Example
 ###支持无限json嵌套解析转换 (开源MAC工具WHC_DataModelFactory 自动把json或者xml字符串生成模型类.m和.h文件
-省去手工创建模型类繁琐避免出错 开源链接：https://github.com/netyouli/WHC_DataModelFactory)
+###省去手工创建模型类繁琐避免出错 开源链接：https://github.com/netyouli/WHC_DataModelFactory)
 ```objective-c
 typedef enum {
     SexMale,
@@ -323,3 +324,7 @@ NSLog(@"xmlStringTwo = %@",xmlStringTwo);
 </ebMobileStartupInqRq>";
 
 ```
+
+## License
+
+WHCNetWorkKit is released under the MIT license. See LICENSE for details.

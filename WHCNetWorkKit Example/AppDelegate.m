@@ -21,8 +21,6 @@
     _window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     _window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[ViewController new]];
     [_window makeKeyAndVisible];
-    [[WHC_HttpManager shared] registerNetworkStatusMoniterEvent];
-    [WHC_HttpManager shared].networkStatus
     return YES;
 }
 
