@@ -63,7 +63,7 @@
         _fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.saveFilePath];
         [_fileHandle seekToEndOfFile];
     }else {
-        NSLog(kWHCCalculateFolderSpaceAvailableFailError);
+        NSLog(@"%@",kWHCCalculateFolderSpaceAvailableFailError);
     }
     [super start];
     [self startRequest];

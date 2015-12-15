@@ -56,7 +56,7 @@
 
 + (NSArray *)arrayWithJson:(NSString *)json {
     assert(json);
-    return [WHC_Json dictionaryWithJsonData:[json dataUsingEncoding:NSUTF8StringEncoding]];
+    return [WHC_Json arrayWithJsonData:[json dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 

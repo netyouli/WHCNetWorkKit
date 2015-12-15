@@ -25,7 +25,7 @@ static char loadOperationKey;
  * @param: state 图片显示对应的状态(这个只针对UIButton)
  */
 
-typedef void(^WHCImageQueryFinished)(UIImage *image , UIControlState state);
+typedef void(^WHCImageQueryFinished)(UIImage * _Nullable image , UIControlState state);
 
 /**
  * 说明: WHC_ImageCache 网络下载图片缓存类

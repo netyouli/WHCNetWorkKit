@@ -211,7 +211,9 @@
 
 - (void)cancelDownloadTask:(BOOL)isDelete task:(WHC_DownloadSessionTask *)task {
     if (!isDelete) {
-        [task.downloadTask cancelByProducingResumeData:NULL];
+        [task.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
+            // 存储恢复下载数据在didCompleteWithError处理
+        }];
     }else {
         [task cancelDownloadTaskAndDeleteFile:isDelete];
     }

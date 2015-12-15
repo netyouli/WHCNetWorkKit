@@ -17,14 +17,15 @@
 
 extern  NSTimeInterval const kWHCRequestTimeout;
 extern  NSTimeInterval const kWHCDownloadSpeedDuring;
-extern  NSString * const kWHCDomain;
-extern  NSString * const kWHCInvainUrlError;
-extern  NSString * const kWHCCalculateFolderSpaceAvailableFailError;
-extern  NSString * const kWHCErrorCode;
-extern  NSString * const kWHCFreeDiskSapceError;
-extern  NSString * const kWHCRequestRange;
-extern  CGFloat   const  kWHCWriteSizeLenght;
-extern  NSString * const kWHCUploadCode;
+extern  CGFloat   const kWHCWriteSizeLenght;
+
+extern  NSString * const _Nullable kWHCDomain;
+extern  NSString * const _Nullable kWHCInvainUrlError;
+extern  NSString * const _Nullable kWHCCalculateFolderSpaceAvailableFailError;
+extern  NSString * const _Nullable kWHCErrorCode;
+extern  NSString * const _Nullable kWHCFreeDiskSapceError;
+extern  NSString * const _Nullable kWHCRequestRange;
+extern  NSString * const _Nullable kWHCUploadCode;
 
 /**
  * WHCHttpRequestStatus  网络请求状态枚举标识
@@ -119,7 +120,7 @@ typedef NS_OPTIONS(NSUInteger, WHCHttpErrorType) {
  * @param: success 下载是否成功
  */
 
-typedef void (^WHCDidFinished) (WHC_BaseOperation * operation ,NSData * data , NSError * error , BOOL isSuccess);
+typedef void (^WHCDidFinished) (WHC_BaseOperation * _Nullable operation ,NSData * _Nullable data ,  NSError * _Nullable  error , BOOL isSuccess);
 
 /**
  * 下载应答回调块
@@ -128,7 +129,7 @@ typedef void (^WHCDidFinished) (WHC_BaseOperation * operation ,NSData * data , N
  * @param: isOK 是否可以下载
  */
 
-typedef void (^WHCResponse)(WHC_BaseOperation * operation , NSError * error ,BOOL isOK);
+typedef void (^WHCResponse)(WHC_BaseOperation * _Nullable operation , NSError * _Nullable error ,BOOL isOK);
 
 /**
  * 下载过程回调块
@@ -138,7 +139,7 @@ typedef void (^WHCResponse)(WHC_BaseOperation * operation , NSError * error ,BOO
  * @param: speed 下载速度
  */
 
-typedef void (^WHCProgress) (WHC_BaseOperation * operation ,uint64_t recvLength , uint64_t totalLength , NSString * speed);
+typedef void (^WHCProgress) (WHC_BaseOperation * _Nullable operation ,uint64_t recvLength , uint64_t totalLength , NSString * _Nullable speed);
 
 
 /**
