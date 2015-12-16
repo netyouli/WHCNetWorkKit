@@ -194,7 +194,7 @@
     MPMovieLoadState loadState = player.loadState;
     if (loadState & MPMovieLoadStateUnknown)
     {
-        [self clickDone:nil];
+//        [self clickDone:nil];
     }
 }
 
