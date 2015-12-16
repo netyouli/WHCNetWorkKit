@@ -11,7 +11,7 @@
 ###安装集成方式
 ```ruby
 platform :ios, '7.0'
-pod "WHCNetWorkKit", "~> 0.0.1"
+pod "WHCNetWorkKit", "~> 0.0.2"
 ```
 
 ##运行效果
