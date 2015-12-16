@@ -8,6 +8,12 @@
 ###封装网络常用工具类json/xml 转模型类对象 json/xml 解析
 ###文件下载模块代理可以自由替换代理或者回调块具体详情请参看自带demo
 
+###安装集成方式
+```ruby
+platform :ios, '7.0'
+pod "WHCNetWorkKit", "~> 0.0.1"
+```
+
 ##运行效果
 ![](https://github.com/netyouli/WHCNetWorkKit/blob/master/show.gif)
 
