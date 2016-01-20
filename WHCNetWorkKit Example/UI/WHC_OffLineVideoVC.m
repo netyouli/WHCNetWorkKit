@@ -21,7 +21,6 @@
 #import "UIView+WHC_Loading.h"
 #import "UIView+WHC_ViewProperty.h"
 #import "UIView+WHC_Toast.h"
-#import "WHC_DownloadObject.h"
 #import "AppDelegate.h"
 
 @import WHCNetWorkKit;
@@ -129,22 +128,25 @@
             [[WHC_HttpManager shared] cancelDownloadWithFileName:_downloadObject.fileName deleteFile:NO];
     #endif
             break;
-        case WHCDownloadCanceled:
+        case WHCDownloadCanceled:{
             _downloadObject.downloadState = WHCDownloadWaitting;
-            [self updateDownloadValue];
     #if WHC_BackgroundDownload
-            [[WHC_SessionDownloadManager shared] download:_downloadObject.downloadPath
+            WHC_DownloadSessionTask * downloadTask = [[WHC_SessionDownloadManager shared] download:_downloadObject.downloadPath
                                                  savePath:[WHC_DownloadObject videoDirectory]
                                              saveFileName:_downloadObject.fileName delegate:self];
+            downloadTask.index = self.index;
             
     #else
-            [[WHC_HttpManager shared] download:_downloadObject.downloadPath
+            WHC_DownloadOperation * operation = [[WHC_HttpManager shared] download:_downloadObject.downloadPath
                                       savePath:[WHC_DownloadObject videoDirectory]
                                   saveFileName:_downloadObject.fileName delegate:self];
+            operation.index = self.index;
     #endif
+            [self updateDownloadValue];
+        }
             break;
         case WHCDownloadWaitting:
-            return;
+            break;
         case WHCDownloadCompleted:
             if (_delegate && [_delegate respondsToSelector:@selector(videoPlayerIndex:)]) {
                 [_delegate videoPlayerIndex:_index];
@@ -155,12 +157,29 @@
     }
 }
 
-- (void)displayCell:(WHC_DownloadObject *)object{
+- (void)displayCell:(WHC_DownloadObject *)object index:(NSInteger)index {
+    self.index = index;
     _downloadObject = object;
+    if (_downloadObject.downloadState == WHCNone ||
+        _downloadObject.downloadState == WHCDownloading ) {
+        _downloadObject.downloadState = WHCDownloadWaitting;
+    }
 #if WHC_BackgroundDownload
-    [[WHC_SessionDownloadManager shared] replaceCurrentDownloadOperationDelegate:self fileName:_downloadObject.fileName];
+    WHC_DownloadSessionTask * downloadTask = [[WHC_SessionDownloadManager shared] replaceCurrentDownloadOperationDelegate:self fileName:_downloadObject.fileName];
+    if ([[WHC_SessionDownloadManager shared] existDownloadOperationTaskWithFileName:_downloadObject.fileName]) {
+        if (_downloadObject.downloadState == WHCDownloadCanceled) {
+            _downloadObject.downloadState = WHCDownloadWaitting;
+        }
+    }
+    downloadTask.index = index;
 #else
-    [[WHC_HttpManager shared] replaceCurrentDownloadOperationDelegate:self fileName:_downloadObject.fileName];
+    WHC_DownloadOperation * operation = [[WHC_HttpManager shared] replaceCurrentDownloadOperationDelegate:self fileName:_downloadObject.fileName];
+    if ([[WHC_HttpManager shared] existDownloadOperationTaskWithFileName:_downloadObject.fileName]) {
+        if (_downloadObject.downloadState == WHCDownloadCanceled) {
+            _downloadObject.downloadState = WHCDownloadWaitting;
+        }
+    }
+    operation.index = index;
 #endif
     [self updateDownloadValue];
     [self removeDownloadAnimtion];
@@ -172,15 +191,30 @@
     [_downloadObject writeDiskCache];
 }
 
+//WHC_DownloadSessionTask : WHC_DownloadOperation
+
 #pragma mark - WHC_DownloadDelegate -
 - (void)WHCDownloadResponse:(nonnull WHC_DownloadOperation *)operation
                       error:(nullable NSError *)error
                          ok:(BOOL)isOK {
     if (isOK) {
-        _downloadObject.downloadState = WHCDownloading;
-        _downloadObject.currentDownloadLenght = operation.recvDataLenght;
-        _downloadObject.totalLenght = operation.fileTotalLenght;
-        [self updateDownloadValue];
+        if (self.index == operation.index) {
+            _downloadObject.downloadState = WHCDownloading;
+            _downloadObject.currentDownloadLenght = operation.recvDataLenght;
+            _downloadObject.totalLenght = operation.fileTotalLenght;
+            [self updateDownloadValue];
+        }else {
+            WHC_DownloadObject * tempDownloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
+            if (tempDownloadObject != nil) {
+                tempDownloadObject.downloadState = WHCDownloading;
+                tempDownloadObject.currentDownloadLenght = operation.recvDataLenght;
+                tempDownloadObject.totalLenght = operation.fileTotalLenght;
+                [tempDownloadObject writeDiskCache];
+                if (_delegate && [_delegate respondsToSelector:@selector(updateDownloadValue: index:)]) {
+                    [_delegate updateDownloadValue:tempDownloadObject index:operation.index];
+                }
+            }
+        }
     }else {
         _downloadObject.downloadState = WHCNone;
         if (_delegate &&
@@ -194,32 +228,75 @@
                        recv:(uint64_t)recvLength
                       total:(uint64_t)totalLength
                       speed:(nullable NSString *)speed {
-    if (_downloadObject.totalLenght < 10) {
-        _downloadObject.totalLenght = totalLength;
+    if (operation.index == self.index) {
+        if (_downloadObject.totalLenght < 10) {
+            _downloadObject.totalLenght = totalLength;
+        }
+        _downloadObject.currentDownloadLenght = recvLength;
+        _downloadObject.downloadSpeed = speed;
+        _downloadObject.downloadState = WHCDownloading;
+        [self updateDownloadValue];
+        [self startDownloadAnimation];
     }
-    _downloadObject.currentDownloadLenght = recvLength;
-    _downloadObject.downloadSpeed = speed;
-    _downloadObject.downloadState = WHCDownloading;
-    [self updateDownloadValue];
-    [self startDownloadAnimation];
 }
 
 - (void)WHCDownloadDidFinished:(nonnull WHC_DownloadOperation *)operation
                           data:(nullable NSData *)data
                          error:(nullable NSError *)error
                        success:(BOOL)isSuccess {
-    
     if (isSuccess) {
-        _downloadObject.downloadState = WHCDownloadCompleted;
-        [self saveDownloadState:operation];
-    }else {
-        _downloadObject.downloadState = WHCDownloadCanceled;
-        if (error != nil &&
-            error.code == WHCCancelDownloadError) {
-                [self saveDownloadState:operation];
+        if (self.index == operation.index) {
+            _downloadObject.downloadState = WHCDownloadCompleted;
+            [self saveDownloadState:operation];
+        }else {
+            WHC_DownloadObject * tempDownloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
+            if (tempDownloadObject != nil) {
+                tempDownloadObject.downloadState = WHCDownloadCompleted;
+                tempDownloadObject.currentDownloadLenght = operation.recvDataLenght;
+                tempDownloadObject.totalLenght = operation.fileTotalLenght;
+                [tempDownloadObject writeDiskCache];
+                if (_delegate && [_delegate respondsToSelector:@selector(updateDownloadValue:index:)]) {
+                    [_delegate updateDownloadValue:tempDownloadObject index:operation.index];
+                }
             }
+        }
+    }else {
+        
+        WHC_DownloadObject * tempDownloadObject;
+        if (self.index == operation.index) {
+            _downloadObject.downloadState = WHCDownloadCanceled;
+        }else {
+            tempDownloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
+            if (tempDownloadObject != nil) {
+                tempDownloadObject.downloadState = WHCDownloadCanceled;
+            }
+        }
+        if (error != nil &&
+            error.code == WHCCancelDownloadError &&
+            !operation.isDeleted) {
+                if (self.index == operation.index) {
+                    [self saveDownloadState:operation];
+                }else {
+                    if (tempDownloadObject != nil) {
+                        tempDownloadObject.currentDownloadLenght = operation.recvDataLenght;
+                        tempDownloadObject.totalLenght = operation.fileTotalLenght;
+                        [tempDownloadObject writeDiskCache];
+                    }
+                    
+                }
+                [self saveDownloadState:operation];
+            }else {
+                [[[UIAlertView alloc] initWithTitle:@"下载失败" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+            }
+        if (tempDownloadObject != nil) {
+            if (_delegate && [_delegate respondsToSelector:@selector(updateDownloadValue:index:)]) {
+                [_delegate updateDownloadValue:tempDownloadObject index:operation.index];
+            }
+        }
     }
-    [self updateDownloadValue];
+    if (self.index == operation.index) {
+        [self updateDownloadValue];
+    }
 }
 
 
@@ -284,6 +361,16 @@
     [_offLineTableView reloadData];
 }
 
+- (void)updateDownloadValue:(WHC_DownloadObject *)downloadObject index:(NSInteger)index {
+    if (downloadObject != nil) {
+        WHC_DownloadObject * tempDownloadObject = _downloadObjectArr[index];
+        tempDownloadObject.currentDownloadLenght = downloadObject.currentDownloadLenght;
+        tempDownloadObject.totalLenght = downloadObject.totalLenght;
+        tempDownloadObject.downloadSpeed = downloadObject.downloadSpeed;
+        tempDownloadObject.downloadState = downloadObject.downloadState;
+    }
+}
+
 - (void)videoPlayerIndex:(NSInteger)index {
     
 }
@@ -307,7 +394,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return kCellHeight;
 }
-
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     return [UIView new];
@@ -341,9 +427,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     WHC_OffLineVideoCell  * cell = [tableView dequeueReusableCellWithIdentifier:kCellName];
     NSInteger row = indexPath.row;
-    cell.index = row;
     cell.delegate = self;
-    [cell displayCell:_downloadObjectArr[row]];
+    [cell displayCell:_downloadObjectArr[row] index:row];
     return cell;
 }
 

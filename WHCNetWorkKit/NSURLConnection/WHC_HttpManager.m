@@ -54,6 +54,8 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
     return self;
 }
 
+
+
 #pragma mark - 网络状态监听 -
 - (void)registerNetworkStatusMoniterEvent {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -410,6 +412,9 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
 
 #pragma mark - 文件下载工具方法 -
 
+- (BOOL)waitingDownload {
+    return _fileDownloadOperationQueue.operations.count > kWHCDefaultDownloadNumber;
+}
 
 - (nullable NSString *)handleFileName:(NSString *)saveFileName url:(NSString *)strUrl {
     if (!_fileDownloadOperationQueue) {
@@ -500,7 +505,7 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
  */
 
 
-- (BOOL)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (WHC_DownloadOperation *)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                              process:(nullable WHCProgress)processBlock
                                          didFinished:(nullable WHCDidFinished)didFinishedBlock
                                             fileName:(nonnull NSString *)fileName {
@@ -510,13 +515,13 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
             downloadOperation.progressBlock = processBlock;
             downloadOperation.responseBlock = responseBlock;
             downloadOperation.didFinishedBlock = didFinishedBlock;
-            return YES;
+            return downloadOperation;
         }
     }
-    return NO;
+    return nil;
 }
 
-- (BOOL)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
+- (WHC_DownloadOperation *)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
                                        fileName:(nonnull NSString *)fileName {
     for (WHC_DownloadOperation * downloadOperation in _fileDownloadOperationQueue.operations) {
         if([downloadOperation.saveFileName isEqualToString:fileName]){
@@ -524,14 +529,14 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
             downloadOperation.responseBlock = nil;
             downloadOperation.didFinishedBlock = nil;
             downloadOperation.delegate = delegate;
-            return YES;
+            return downloadOperation;
         }
     }
-    return NO;
+    return nil;
 }
 
 //替换所有当前下载代理
-- (BOOL)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (WHC_DownloadOperation *)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                          process:(nullable WHCProgress)processBlock
                                      didFinished:(nullable WHCDidFinished)didFinishedBlock {
     if (_fileDownloadOperationQueue.operations.count > 0) {
@@ -541,12 +546,12 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
             downloadOperation.responseBlock = responseBlock;
             downloadOperation.didFinishedBlock = didFinishedBlock;
         }
-        return YES;
+        return nil;
     }
-    return NO;
+    return nil;
 }
 
-- (BOOL)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate {
+- (WHC_DownloadOperation *)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate {
     if (_fileDownloadOperationQueue.operations.count > 0) {
         for (WHC_DownloadOperation * downloadOperation in _fileDownloadOperationQueue.operations) {
             downloadOperation.progressBlock = nil;
@@ -554,9 +559,9 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
             downloadOperation.didFinishedBlock = nil;
             downloadOperation.delegate = delegate;
         }
-        return YES;
+        return nil;
     }
-    return NO;
+    return nil;
 }
 
 

@@ -16,6 +16,7 @@
 
 
 @interface WHC_SessionDownloadManager () <NSURLSessionDataDelegate , NSURLSessionDelegate>{
+    NSOperationQueue *  _asynQueue;
     NSURLSession     *  _downloadSession;
     NSMutableArray   *  _downloadTaskArr;
     NSMutableDictionary * _resumeDataDictionary;
@@ -40,6 +41,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _asynQueue = [NSOperationQueue new];
+        _asynQueue.maxConcurrentOperationCount = kWHCDefaultDownloadNumber;
         _downloadTaskArr = [NSMutableArray array];
         _resumeDataDictionary = [NSMutableDictionary dictionary];
         _fileManager = [NSFileManager defaultManager];
@@ -66,9 +69,13 @@
             configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:_bundleIdentifier];
         }
         configuration.discretionary = YES;
-        _downloadSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+        _downloadSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:_asynQueue];
         
     }
+}
+
+- (BOOL)waitingDownload {
+    return _asynQueue.operations.count > kWHCDefaultDownloadNumber;
 }
 
 #pragma mark - 下载对外接口
@@ -256,7 +263,7 @@
     }
 }
 
-- (BOOL)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (WHC_DownloadSessionTask *)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                              process:(nullable WHCProgress)processBlock
                                          didFinished:(nullable WHCDidFinished)didFinishedBlock
                                             fileName:(nonnull NSString *)fileName {
@@ -266,13 +273,13 @@
             downloadTask.progressBlock = processBlock;
             downloadTask.responseBlock = responseBlock;
             downloadTask.didFinishedBlock = didFinishedBlock;
-            return YES;
+            return downloadTask;
         }
     }
-    return NO;
+    return nil;
 }
 
-- (BOOL)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
+- (WHC_DownloadSessionTask *)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
                                        fileName:(nonnull NSString *)fileName {
     for (WHC_DownloadSessionTask * downloadTask in _downloadTaskArr) {
         if([downloadTask.saveFileName isEqualToString:fileName]){
@@ -280,13 +287,13 @@
             downloadTask.responseBlock = nil;
             downloadTask.didFinishedBlock = nil;
             downloadTask.delegate = delegate;
-            return YES;
+            return downloadTask;
         }
     }
-    return NO;
+    return nil;
 }
 
-- (BOOL)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (WHC_DownloadSessionTask *)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                          process:(nullable WHCProgress)processBlock
                                      didFinished:(nullable WHCDidFinished)didFinishedBlock {
     if (_downloadTaskArr.count > 0) {
@@ -296,12 +303,12 @@
             downloadTask.responseBlock = responseBlock;
             downloadTask.didFinishedBlock = didFinishedBlock;
         }
-        return YES;
+        return nil;
     }
-    return NO;
+    return nil;
 }
 
-- (BOOL)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate {
+- (WHC_DownloadSessionTask *)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate {
     if (_downloadTaskArr.count > 0) {
         for (WHC_DownloadSessionTask * downloadTask in _downloadTaskArr) {
             downloadTask.progressBlock = nil;
@@ -309,9 +316,9 @@
             downloadTask.didFinishedBlock = nil;
             downloadTask.delegate = delegate;
         }
-        return YES;
+        return nil;
     }
-    return NO;
+    return nil;
 }
 
 

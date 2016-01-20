@@ -102,6 +102,7 @@
 #pragma mark - 公共处理方法 -
 
 - (void)cancelDownloadTaskAndDeleteFile:(BOOL)isDelete {
+    _isDeleted = isDelete;
     if(self.responseData.length > 0 && _fileHandle){
         [_fileHandle writeData:self.responseData];
         [self clearResponseData];

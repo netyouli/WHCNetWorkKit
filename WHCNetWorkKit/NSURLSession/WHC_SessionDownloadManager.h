@@ -13,12 +13,16 @@
 #import <Foundation/Foundation.h>
 #import "WHC_DownloadSessionTask.h"
 
-
 /**
  * 说明: WHC_SessionDownloadManager 后台下载管理类 单例设计模式
  */
 
 @interface WHC_SessionDownloadManager : NSObject
+
+/**
+ * 说明: 当前是否是等待下载状态
+ */
+- (BOOL)waitingDownload;
 
 /**
  * 后台下载配置字符
@@ -116,7 +120,7 @@
  */
 
 
-- (BOOL)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (nullable WHC_DownloadSessionTask *)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                              process:(nullable WHCProgress)processBlock
                                          didFinished:(nullable WHCDidFinished)didFinishedBlock
                                             fileName:(nonnull NSString *)fileName;
@@ -127,7 +131,7 @@
  * @param fileName 文件名
  */
 
-- (BOOL)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
+- (nullable WHC_DownloadSessionTask *)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
                                        fileName:(nonnull NSString *)fileName;
 
 /**
@@ -137,7 +141,7 @@
  * @param didFinishedBlock 下载完成回调
  */
 
-- (BOOL)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (nullable WHC_DownloadSessionTask *)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                          process:(nullable WHCProgress)processBlock
                                      didFinished:(nullable WHCDidFinished)didFinishedBlock;
 
@@ -146,7 +150,7 @@
  * @param delegate 下载回调新代理
  */
 
-- (BOOL)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate;
+- (nullable WHC_DownloadSessionTask *)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate;
 
 
 /**

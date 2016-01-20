@@ -30,6 +30,11 @@ extern const NSInteger kWHCDefaultDownloadNumber;
 @interface WHC_HttpManager : NSObject
 
 /**
+ * 说明: 当前是否是等待下载状态
+ */
+- (BOOL)waitingDownload;
+
+/**
  * 网络管理单例对象
  */
 + (nonnull instancetype)shared;
@@ -312,7 +317,7 @@ extern const NSInteger kWHCDefaultDownloadNumber;
  * @param fileName 文件名
  */
 
-- (BOOL)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (nullable WHC_DownloadOperation *)replaceCurrentDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                              process:(nullable WHCProgress)processBlock
                                          didFinished:(nullable WHCDidFinished)didFinishedBlock
                                             fileName:(nonnull NSString *)fileName;
@@ -323,7 +328,7 @@ extern const NSInteger kWHCDefaultDownloadNumber;
  * @param fileName 文件名
  */
 
-- (BOOL)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
+- (nullable WHC_DownloadOperation *)replaceCurrentDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate
                                        fileName:(nonnull NSString *)fileName;
 
 /**
@@ -332,7 +337,7 @@ extern const NSInteger kWHCDefaultDownloadNumber;
  * @param processBlock 下载过程回调
  * @param didFinishedBlock 下载完成回调
  */
-- (BOOL)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
+- (nullable WHC_DownloadOperation *)replaceAllDownloadOperationBlockResponse:(nullable WHCResponse)responseBlock
                                          process:(nullable WHCProgress)processBlock
                                      didFinished:(nullable WHCDidFinished)didFinishedBlock;
 
@@ -341,7 +346,7 @@ extern const NSInteger kWHCDefaultDownloadNumber;
  * @param delegate 下载回调新代理
  */
 
-- (BOOL)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate;
+- (nullable WHC_DownloadOperation *)replaceAllDownloadOperationDelegate:(nullable id<WHC_DownloadDelegate>)delegate;
 
 /**
  * 说明：通过要下载的文件名来判断当前是否在进行下载任务

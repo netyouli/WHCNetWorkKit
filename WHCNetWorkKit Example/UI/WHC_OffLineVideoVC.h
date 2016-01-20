@@ -14,10 +14,12 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "WHC_DownloadObject.h"
 
 @protocol WHC_OffLineVideoCellDelegate <NSObject>
 
 - (void)videoDownload:(NSError *)error index:(NSInteger)index strUrl:(NSString *)strUrl;
+- (void)updateDownloadValue:(WHC_DownloadObject *)downloadObject index:(NSInteger)index;
 - (void)videoPlayerIndex:(NSInteger)index;
 
 @end

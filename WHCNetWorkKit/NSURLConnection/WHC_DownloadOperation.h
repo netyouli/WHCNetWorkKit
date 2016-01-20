@@ -16,6 +16,12 @@
 
 
 @interface WHC_DownloadOperation : WHC_BaseOperation
+
+/**
+ * 下载操作下标
+ */
+
+@property (nonatomic , assign)NSInteger index;
 /**
  * 保存文件路径
  */
@@ -41,6 +47,11 @@
  * 本地缓存文件总长度
  */
 @property (nonatomic , assign)uint64_t                      localFileLenght;
+
+/**
+ * 下载任务是否删除
+ */
+@property (nonatomic , assign)BOOL isDeleted;
 
 /**
  * 函数说明: 取消当前下载任务
