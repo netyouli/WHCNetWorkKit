@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'WHCNetWorkKit'
-  s.version      = '0.0.2'
+  s.version      = '0.0.3'
   s.summary      = 'WHCNetWorkKit 是http网络请求开源库(支持GET/POST 文件上传 后台文件下载 UIButton UIImageView 控件设置网络图片 网络数据工具json/xml 转模型类对象 网络状态监听)'
   s.homepage     = 'https://github.com/netyouli/WHCNetWorkKit'
   #s.screenshots  = 'https://github.com/netyouli/WHCNetWorkKit/blob/master/show.gif'
