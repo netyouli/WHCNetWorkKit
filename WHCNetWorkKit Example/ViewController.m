@@ -29,7 +29,7 @@
 #import <WHCNetWorkKit/UIImageView+WHC_HttpImageView.h>
 
 #define kWHC_CellName             (@"WHC：视频下载文件")
-#define kWHC_DefaultDownloadUrl   (@"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png")//(@"http://dlsw.baidu.com/sw-search-sp/soft/3b/29082/ykkhdmacb0.9.1438938315.dmg")
+#define kWHC_DefaultDownloadUrl   (@"http://dlsw.baidu.com/sw-search-sp/soft/3b/29082/ykkhdmacb0.9.1438938315.dmg")
 
 
 @interface ViewController ()<WHC_PullRefreshDelegate>{
@@ -108,10 +108,6 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    for (NSInteger i = 0; i < 200; i++) {
-        NSLog(@"正在下载线程%d",i);
-        [self downloadRow:i];
-    }
 }
 
 - (void)downloadRow:(NSInteger)row {
