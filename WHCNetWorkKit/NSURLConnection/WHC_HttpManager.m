@@ -313,7 +313,7 @@ const NSInteger kWHCDefaultDownloadNumber = 3;
                                     response:(nullable WHCResponse) responseBlock
                                      process:(nullable WHCProgress) processBlock
                                  didFinished:(nullable WHCDidFinished) finishedBlock {
-
+NSLog(@"_fileDownloadOperationQueue.operations = %d",_fileDownloadOperationQueue.operations.count);
     WHC_DownloadOperation  * downloadOperation = nil;
     NSString * fileName = nil;
     if (strUrl != nil && ![_failedUrls containsObject:strUrl]) {

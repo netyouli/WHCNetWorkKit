@@ -28,6 +28,7 @@ NSString  * const  kWHCUploadCode = @"WHC";
 
 @interface WHC_BaseOperation () {
     NSTimer * _speedTimer;
+    NSThread * _thread;
 }
 
 @end
@@ -66,45 +67,47 @@ NSString  * const  kWHCUploadCode = @"WHC";
 #pragma mark - 重写队列操作方法 -
 
 - (void)start {
-    if ([NSURLConnection canHandleRequest:self.urlRequest]) {
-        self.urlRequest.timeoutInterval = self.timeoutInterval;
-        self.urlRequest.cachePolicy = self.cachePolicy;
-        [_urlRequest setValue:self.contentType forHTTPHeaderField: @"Content-Type"];
-        switch (self.requestType) {
-            case WHCHttpRequestGet:
-            case WHCHttpRequestFileDownload:{
-                [_urlRequest setHTTPMethod:@"GET"];
-            }
-                break;
-            case WHCHttpRequestPost:
-            case WHCHttpRequestFileUpload:{
-                [_urlRequest setHTTPMethod:@"POST"];
-                if([WHC_HttpManager shared].cookie && [WHC_HttpManager shared].cookie.length > 0) {
-                    [_urlRequest setValue:[WHC_HttpManager shared].cookie forHTTPHeaderField:@"Cookie"];
+    @autoreleasepool {
+        if ([NSURLConnection canHandleRequest:self.urlRequest]) {
+            self.urlRequest.timeoutInterval = self.timeoutInterval;
+            self.urlRequest.cachePolicy = self.cachePolicy;
+            [_urlRequest setValue:self.contentType forHTTPHeaderField: @"Content-Type"];
+            switch (self.requestType) {
+                case WHCHttpRequestGet:
+                case WHCHttpRequestFileDownload:{
+                    [_urlRequest setHTTPMethod:@"GET"];
                 }
-                if (self.postParam != nil) {
-                    NSData * paramData = nil;
-                    if ([self.postParam isKindOfClass:[NSData class]]) {
-                        paramData = (NSData *)self.postParam;
-                    }else if ([self.postParam isKindOfClass:[NSString class]]) {
-                        paramData = [((NSString *)self.postParam) dataUsingEncoding:self.encoderType allowLossyConversion:YES];
+                    break;
+                case WHCHttpRequestPost:
+                case WHCHttpRequestFileUpload:{
+                    [_urlRequest setHTTPMethod:@"POST"];
+                    if([WHC_HttpManager shared].cookie && [WHC_HttpManager shared].cookie.length > 0) {
+                        [_urlRequest setValue:[WHC_HttpManager shared].cookie forHTTPHeaderField:@"Cookie"];
                     }
-                    if (paramData) {
-                        [_urlRequest setHTTPBody:paramData];
-                        [_urlRequest setValue:[NSString stringWithFormat:@"%zd", paramData.length] forHTTPHeaderField: @"Content-Length"];
+                    if (self.postParam != nil) {
+                        NSData * paramData = nil;
+                        if ([self.postParam isKindOfClass:[NSData class]]) {
+                            paramData = (NSData *)self.postParam;
+                        }else if ([self.postParam isKindOfClass:[NSString class]]) {
+                            paramData = [((NSString *)self.postParam) dataUsingEncoding:self.encoderType allowLossyConversion:YES];
+                        }
+                        if (paramData) {
+                            [_urlRequest setHTTPBody:paramData];
+                            [_urlRequest setValue:[NSString stringWithFormat:@"%zd", paramData.length] forHTTPHeaderField: @"Content-Length"];
+                        }
                     }
                 }
+                    break;
+                default:
+                    break;
             }
-                break;
-            default:
-                break;
+            if(self.urlConnection == nil){
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+                self.urlConnection = [[NSURLConnection alloc]initWithRequest:_urlRequest delegate:self startImmediately:NO];
+            }
+        }else {
+            [self handleReqeustError:nil code:WHCGeneralError];
         }
-        if(self.urlConnection == nil){
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-            self.urlConnection = [[NSURLConnection alloc]initWithRequest:_urlRequest delegate:self startImmediately:NO];
-        }
-    }else {
-        [self handleReqeustError:nil code:WHCGeneralError];
     }
 }
 
@@ -113,12 +116,22 @@ NSString  * const  kWHCUploadCode = @"WHC";
 }
 
 - (BOOL)isCancelled {
-    return _requestStatus == WHCHttpRequestCanceled ||
+    BOOL isCancelled = _requestStatus == WHCHttpRequestCanceled ||
     _requestStatus == WHCHttpRequestFinished;
+    if (isCancelled) {
+        CFRunLoopStop(CFRunLoopGetCurrent());
+        _thread = nil;
+    }
+    return isCancelled;
 }
 
 - (BOOL)isFinished {
-    return _requestStatus == WHCHttpRequestFinished;
+    BOOL isFinished = _requestStatus == WHCHttpRequestFinished;
+    if (isFinished) {
+        CFRunLoopStop(CFRunLoopGetCurrent());
+        _thread = nil;
+    }
+    return isFinished;
 }
 
 - (BOOL)isConcurrent{
@@ -145,13 +158,12 @@ NSString  * const  kWHCUploadCode = @"WHC";
 }
 
 - (void)startRequest {
-    NSRunLoop * urnLoop = [NSRunLoop currentRunLoop];
-    [_urlConnection scheduleInRunLoop:urnLoop forMode:NSDefaultRunLoopMode];
     [self willChangeValueForKey:@"isExecuting"];
     _requestStatus = WHCHttpRequestExecuting;
     [self didChangeValueForKey:@"isExecuting"];
+    _thread = [NSThread currentThread];
     [_urlConnection start];
-    [urnLoop run];
+    CFRunLoopRun();
 }
 
 - (void)addDependOperation:(WHC_BaseOperation *)operation {
@@ -213,13 +225,14 @@ NSString  * const  kWHCUploadCode = @"WHC";
 - (void)cancelledRequest{
     if (_urlConnection) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        _requestStatus = WHCHttpRequestFinished;
-        [self willChangeValueForKey:@"isCancelled"];
-        [self willChangeValueForKey:@"isFinished"];
+        [_urlConnection unscheduleFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [_urlConnection cancel];
         _urlConnection = nil;
-        [self didChangeValueForKey:@"isCancelled"];
+        [self willChangeValueForKey:@"isCancelled"];
+        [self willChangeValueForKey:@"isFinished"];
+        _requestStatus = WHCHttpRequestFinished;
         [self didChangeValueForKey:@"isFinished"];
+        [self didChangeValueForKey:@"isCancelled"];
         if (_requestType == WHCHttpRequestFileUpload ||
             _requestType == WHCHttpRequestFileDownload) {
             if (_speedTimer) {

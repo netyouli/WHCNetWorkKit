@@ -29,7 +29,7 @@
 #import <WHCNetWorkKit/UIImageView+WHC_HttpImageView.h>
 
 #define kWHC_CellName             (@"WHC：视频下载文件")
-#define kWHC_DefaultDownloadUrl   (@"http://dlsw.baidu.com/sw-search-sp/soft/3b/29082/ykkhdmacb0.9.1438938315.dmg")
+#define kWHC_DefaultDownloadUrl   (@"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png")//(@"http://dlsw.baidu.com/sw-search-sp/soft/3b/29082/ykkhdmacb0.9.1438938315.dmg")
 
 
 @interface ViewController ()<WHC_PullRefreshDelegate>{
@@ -49,7 +49,7 @@
 
 - (void)initData{
     _fileNameArr = [NSMutableArray array];
-    for (NSInteger i = 0; i < 10 ; i++) {
+    for (NSInteger i = 0; i < 200 ; i++) {
         [_fileNameArr addObject:[NSString stringWithFormat:@"%@%d    (%@)",kWHC_CellName,(int)i + 1,@"单击下载视频文件"]];
     }
 }
@@ -105,6 +105,118 @@
         [_downloadTv reloadData];
     });
 
+}
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    for (NSInteger i = 0; i < 200; i++) {
+        NSLog(@"正在下载线程%d",i);
+        [self downloadRow:i];
+    }
+}
+
+- (void)downloadRow:(NSInteger)row {
+    {
+        NSString * suffix = [[WHC_HttpManager shared] fileFormatWithUrl:kWHC_DefaultDownloadUrl];
+        NSString * fileName = [NSString stringWithFormat:@"%@%@",
+                               _fileNameArr[row],
+                               suffix != nil ? suffix : @".dmg"];
+        __weak typeof(self) weakSelf = self;
+#if WHC_BackgroundDownload
+        [[WHC_SessionDownloadManager shared] setBundleIdentifier:@"com.WHC.WHCNetWorkKit.backgroundsession"];
+        WHC_DownloadSessionTask * downloadTask = [[WHC_SessionDownloadManager shared]
+                                                  download:kWHC_DefaultDownloadUrl
+                                                  savePath:[WHC_DownloadObject videoDirectory]
+                                                  saveFileName:fileName
+                                                  response:^(WHC_BaseOperation *operation, NSError *error, BOOL isOK) {
+                                                      WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
+                                                      WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
+                                                      if (downloadObject == nil) {
+                                                          [weakSelf.view toast:@"已经添加到下载队列"];
+                                                          downloadObject = [WHC_DownloadObject new];
+                                                      }
+                                                      downloadObject.fileName = downloadOperation.saveFileName;
+                                                      downloadObject.downloadPath = downloadOperation.strUrl;
+                                                      downloadObject.downloadState = WHCDownloading;
+                                                      downloadObject.currentDownloadLenght = downloadOperation.recvDataLenght;
+                                                      downloadObject.totalLenght = downloadOperation.fileTotalLenght;
+                                                      [downloadObject writeDiskCache];
+                                                  } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
+                                                      NSLog(@"recvLength = %llu , totalLength = %llu , speed = %@",recvLength , totalLength , speed);
+                                                  } didFinished:^(WHC_BaseOperation *operation, NSData *data, NSError *error, BOOL isSuccess) {
+                                                      if (isSuccess) {
+                                                          [weakSelf.view toast:@"下载成功"];
+                                                          [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
+                                                      }else {
+                                                          [weakSelf.view toast:error.userInfo[NSLocalizedDescriptionKey]];
+                                                          if (error != nil &&
+                                                              error.code == WHCCancelDownloadError) {
+                                                              [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
+                                                          }
+                                                      }
+                                                  }];
+        
+#else
+        WHC_DownloadOperation * downloadTask = nil;
+        downloadTask = [[WHC_HttpManager shared] download:kWHC_DefaultDownloadUrl
+                                                 savePath:[WHC_DownloadObject videoDirectory]
+                                             saveFileName:fileName
+                                                 response:^(WHC_BaseOperation *operation, NSError *error, BOOL isOK) {
+                                                     if (isOK) {
+                                                         
+                                                         WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
+                                                         WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
+                                                         if (downloadObject == nil) {
+                                                             [weakSelf.view toast:@"已经添加到下载队列"];
+                                                             downloadObject = [WHC_DownloadObject new];
+                                                         }
+                                                         downloadObject.fileName = downloadOperation.saveFileName;
+                                                         downloadObject.downloadPath = downloadOperation.strUrl;
+                                                         downloadObject.downloadState = WHCDownloading;
+                                                         downloadObject.currentDownloadLenght = downloadOperation.recvDataLenght;
+                                                         downloadObject.totalLenght = downloadOperation.fileTotalLenght;
+                                                         [downloadObject writeDiskCache];
+                                                     }else {
+                                                         [weakSelf errorHandle:(WHC_DownloadOperation *)operation error:error];
+                                                     }
+                                                 } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
+                                                     NSLog(@"recvLength = %llu totalLength = %llu speed = %@",recvLength , totalLength , speed);
+                                                 } didFinished:^(WHC_BaseOperation *operation, NSData *data, NSError *error, BOOL isSuccess) {
+                                                     if (isSuccess) {
+                                                         [weakSelf.view toast:@"下载成功"];
+                                                         [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
+                                                     }else {
+                                                         [weakSelf errorHandle:(WHC_DownloadOperation *)operation error:error];
+                                                         if (error != nil &&
+                                                             error.code == WHCCancelDownloadError) {
+                                                             [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
+                                                         }
+                                                     }
+                                                 }];
+        
+#endif
+        if (downloadTask.requestStatus == WHCHttpRequestNone) {
+#if WHC_BackgroundDownload 
+            if (![[WHC_SessionDownloadManager shared] waitingDownload]) {
+                return;
+            }
+#else
+            if (![[WHC_HttpManager shared] waitingDownload]) {
+                return;
+            }
+#endif
+            WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:downloadTask.strUrl];
+            if (downloadObject == nil) {
+                [weakSelf.view toast:@"已经添加到下载队列"];
+                downloadObject = [WHC_DownloadObject new];
+            }
+            downloadObject.fileName = fileName;
+            downloadObject.downloadPath = kWHC_DefaultDownloadUrl;
+            downloadObject.downloadState = WHCDownloadWaitting;
+            downloadObject.currentDownloadLenght = 0;
+            downloadObject.totalLenght = 0;
+            [downloadObject writeDiskCache];
+        }
+    }
 }
 
 #pragma mark - 列表代理方法

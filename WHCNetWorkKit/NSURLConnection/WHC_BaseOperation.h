@@ -241,7 +241,7 @@ typedef void (^WHCProgress) (WHC_BaseOperation * _Nullable operation ,uint64_t r
 /**
  * 下载操作代理对象
  */
-@property (nonatomic , weak)id<WHC_DownloadDelegate> delegate;
+@property (nonatomic , weak, nullable)id<WHC_DownloadDelegate> delegate;
 
 /**
  * 说明: 清空http 应答数据
