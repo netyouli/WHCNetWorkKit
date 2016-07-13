@@ -131,6 +131,7 @@
         case WHCDownloadCanceled:{
             _downloadObject.downloadState = WHCDownloadWaitting;
     #if WHC_BackgroundDownload
+            [[WHC_SessionDownloadManager shared] setBundleIdentifier:@"com.WHC.WHCNetWorkKit.backgroundsession"];
             WHC_DownloadSessionTask * downloadTask = [[WHC_SessionDownloadManager shared] download:_downloadObject.downloadPath
                                                  savePath:[WHC_DownloadObject videoDirectory]
                                              saveFileName:_downloadObject.fileName delegate:self];
@@ -165,6 +166,7 @@
         _downloadObject.downloadState = WHCDownloadWaitting;
     }
 #if WHC_BackgroundDownload
+    [[WHC_SessionDownloadManager shared] setBundleIdentifier:@"com.WHC.WHCNetWorkKit.backgroundsession"];
     WHC_DownloadSessionTask * downloadTask = [[WHC_SessionDownloadManager shared] replaceCurrentDownloadOperationDelegate:self fileName:_downloadObject.fileName];
     if ([[WHC_SessionDownloadManager shared] existDownloadOperationTaskWithFileName:_downloadObject.fileName]) {
         if (_downloadObject.downloadState == WHCDownloadCanceled) {

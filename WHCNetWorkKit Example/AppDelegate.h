@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define WHC_BackgroundDownload (0)
+#define WHC_BackgroundDownload (1)
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

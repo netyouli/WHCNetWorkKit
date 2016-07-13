@@ -47,7 +47,7 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)initData{
+- (void)initData {
     _fileNameArr = [NSMutableArray array];
     for (NSInteger i = 0; i < 200 ; i++) {
         [_fileNameArr addObject:[NSString stringWithFormat:@"%@%d    (%@)",kWHC_CellName,(int)i + 1,@"单击下载视频文件"]];
@@ -254,19 +254,19 @@
           savePath:[WHC_DownloadObject videoDirectory]
       saveFileName:fileName
           response:^(WHC_BaseOperation *operation, NSError *error, BOOL isOK) {
+          } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
               WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
               WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
               if (downloadObject == nil) {
                   [weakSelf.view toast:@"已经添加到下载队列"];
                   downloadObject = [WHC_DownloadObject new];
+                  downloadObject.fileName = downloadOperation.saveFileName;
+                  downloadObject.downloadPath = downloadOperation.strUrl;
+                  downloadObject.downloadState = WHCDownloading;
+                  downloadObject.currentDownloadLenght = downloadOperation.recvDataLenght;
+                  downloadObject.totalLenght = downloadOperation.fileTotalLenght;
+                  [downloadObject writeDiskCache];
               }
-              downloadObject.fileName = downloadOperation.saveFileName;
-              downloadObject.downloadPath = downloadOperation.strUrl;
-              downloadObject.downloadState = WHCDownloading;
-              downloadObject.currentDownloadLenght = downloadOperation.recvDataLenght;
-              downloadObject.totalLenght = downloadOperation.fileTotalLenght;
-              [downloadObject writeDiskCache];
-          } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
               NSLog(@"recvLength = %llu , totalLength = %llu , speed = %@",recvLength , totalLength , speed);
           } didFinished:^(WHC_BaseOperation *operation, NSData *data, NSError *error, BOOL isSuccess) {
               if (isSuccess) {

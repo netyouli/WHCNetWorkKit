@@ -220,6 +220,7 @@
     if (!isDelete) {
         [task.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
             // 存储恢复下载数据在didCompleteWithError处理
+            NSLog(@"暂停下载");
         }];
     }else {
         [task cancelDownloadTaskAndDeleteFile:isDelete];
