@@ -110,111 +110,6 @@
     [super viewDidAppear:animated];
 }
 
-- (void)downloadRow:(NSInteger)row {
-    {
-        NSString * suffix = [[WHC_HttpManager shared] fileFormatWithUrl:kWHC_DefaultDownloadUrl];
-        NSString * fileName = [NSString stringWithFormat:@"%@%@",
-                               _fileNameArr[row],
-                               suffix != nil ? suffix : @".dmg"];
-        __weak typeof(self) weakSelf = self;
-#if WHC_BackgroundDownload
-        [[WHC_SessionDownloadManager shared] setBundleIdentifier:@"com.WHC.WHCNetWorkKit.backgroundsession"];
-        WHC_DownloadSessionTask * downloadTask = [[WHC_SessionDownloadManager shared]
-                                                  download:kWHC_DefaultDownloadUrl
-                                                  savePath:[WHC_DownloadObject videoDirectory]
-                                                  saveFileName:fileName
-                                                  response:^(WHC_BaseOperation *operation, NSError *error, BOOL isOK) {
-                                                      WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
-                                                      WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
-                                                      if (downloadObject == nil) {
-                                                          [weakSelf.view toast:@"已经添加到下载队列"];
-                                                          downloadObject = [WHC_DownloadObject new];
-                                                      }
-                                                      downloadObject.fileName = downloadOperation.saveFileName;
-                                                      downloadObject.downloadPath = downloadOperation.strUrl;
-                                                      downloadObject.downloadState = WHCDownloading;
-                                                      downloadObject.currentDownloadLenght = downloadOperation.recvDataLenght;
-                                                      downloadObject.totalLenght = downloadOperation.fileTotalLenght;
-                                                      [downloadObject writeDiskCache];
-                                                  } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
-                                                      NSLog(@"recvLength = %llu , totalLength = %llu , speed = %@",recvLength , totalLength , speed);
-                                                  } didFinished:^(WHC_BaseOperation *operation, NSData *data, NSError *error, BOOL isSuccess) {
-                                                      if (isSuccess) {
-                                                          [weakSelf.view toast:@"下载成功"];
-                                                          [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
-                                                      }else {
-                                                          [weakSelf.view toast:error.userInfo[NSLocalizedDescriptionKey]];
-                                                          if (error != nil &&
-                                                              error.code == WHCCancelDownloadError) {
-                                                              [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
-                                                          }
-                                                      }
-                                                  }];
-        
-#else
-        WHC_DownloadOperation * downloadTask = nil;
-        downloadTask = [[WHC_HttpManager shared] download:kWHC_DefaultDownloadUrl
-                                                 savePath:[WHC_DownloadObject videoDirectory]
-                                             saveFileName:fileName
-                                                 response:^(WHC_BaseOperation *operation, NSError *error, BOOL isOK) {
-                                                     if (isOK) {
-                                                         
-                                                         WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
-                                                         WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
-                                                         if (downloadObject == nil) {
-                                                             [weakSelf.view toast:@"已经添加到下载队列"];
-                                                             downloadObject = [WHC_DownloadObject new];
-                                                         }
-                                                         downloadObject.fileName = downloadOperation.saveFileName;
-                                                         downloadObject.downloadPath = downloadOperation.strUrl;
-                                                         downloadObject.downloadState = WHCDownloading;
-                                                         downloadObject.currentDownloadLenght = downloadOperation.recvDataLenght;
-                                                         downloadObject.totalLenght = downloadOperation.fileTotalLenght;
-                                                         [downloadObject writeDiskCache];
-                                                     }else {
-                                                         [weakSelf errorHandle:(WHC_DownloadOperation *)operation error:error];
-                                                     }
-                                                 } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
-                                                     NSLog(@"recvLength = %llu totalLength = %llu speed = %@",recvLength , totalLength , speed);
-                                                 } didFinished:^(WHC_BaseOperation *operation, NSData *data, NSError *error, BOOL isSuccess) {
-                                                     if (isSuccess) {
-                                                         [weakSelf.view toast:@"下载成功"];
-                                                         [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
-                                                     }else {
-                                                         [weakSelf errorHandle:(WHC_DownloadOperation *)operation error:error];
-                                                         if (error != nil &&
-                                                             error.code == WHCCancelDownloadError) {
-                                                             [weakSelf saveDownloadStateOperation:(WHC_DownloadOperation *)operation];
-                                                         }
-                                                     }
-                                                 }];
-        
-#endif
-        if (downloadTask.requestStatus == WHCHttpRequestNone) {
-#if WHC_BackgroundDownload 
-            if (![[WHC_SessionDownloadManager shared] waitingDownload]) {
-                return;
-            }
-#else
-            if (![[WHC_HttpManager shared] waitingDownload]) {
-                return;
-            }
-#endif
-            WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:downloadTask.strUrl];
-            if (downloadObject == nil) {
-                [weakSelf.view toast:@"已经添加到下载队列"];
-                downloadObject = [WHC_DownloadObject new];
-            }
-            downloadObject.fileName = fileName;
-            downloadObject.downloadPath = kWHC_DefaultDownloadUrl;
-            downloadObject.downloadState = WHCDownloadWaitting;
-            downloadObject.currentDownloadLenght = 0;
-            downloadObject.totalLenght = 0;
-            [downloadObject writeDiskCache];
-        }
-    }
-}
-
 #pragma mark - 列表代理方法
 #pragma mark - UITableViewDelegate UITableViewDataSource
 
@@ -256,10 +151,9 @@
           response:^(WHC_BaseOperation *operation, NSError *error, BOOL isOK) {
           } process:^(WHC_BaseOperation *operation, uint64_t recvLength, uint64_t totalLength, NSString *speed) {
               WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
-              WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
-              if (downloadObject == nil) {
+              if (![WHC_DownloadObject existLocalSavePath:downloadOperation.saveFileName]) {
+                  WHC_DownloadObject * downloadObject = [WHC_DownloadObject new];
                   [weakSelf.view toast:@"已经添加到下载队列"];
-                  downloadObject = [WHC_DownloadObject new];
                   downloadObject.fileName = downloadOperation.saveFileName;
                   downloadObject.downloadPath = downloadOperation.strUrl;
                   downloadObject.downloadState = WHCDownloading;
@@ -290,7 +184,7 @@
              if (isOK) {
                  
                  WHC_DownloadOperation * downloadOperation = (WHC_DownloadOperation*)operation;
-                 WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:operation.strUrl];
+                 WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:downloadOperation.saveFileName];
                  if (downloadObject == nil) {
                      [weakSelf.view toast:@"已经添加到下载队列"];
                      downloadObject = [WHC_DownloadObject new];
@@ -330,17 +224,17 @@
             return;
         }
 #endif
-        WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:downloadTask.strUrl];
+        WHC_DownloadObject * downloadObject = [WHC_DownloadObject readDiskCache:downloadTask.saveFileName];
         if (downloadObject == nil) {
             [weakSelf.view toast:@"已经添加到下载队列"];
             downloadObject = [WHC_DownloadObject new];
+            downloadObject.fileName = fileName;
+            downloadObject.downloadPath = kWHC_DefaultDownloadUrl;
+            downloadObject.downloadState = WHCDownloadWaitting;
+            downloadObject.currentDownloadLenght = 0;
+            downloadObject.totalLenght = 0;
+            [downloadObject writeDiskCache];
         }
-        downloadObject.fileName = fileName;
-        downloadObject.downloadPath = kWHC_DefaultDownloadUrl;
-        downloadObject.downloadState = WHCDownloadWaitting;
-        downloadObject.currentDownloadLenght = 0;
-        downloadObject.totalLenght = 0;
-        [downloadObject writeDiskCache];
     }
 }
 

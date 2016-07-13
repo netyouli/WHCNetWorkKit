@@ -62,6 +62,12 @@ const static double k1MB = 1024 * 1024;
     return [NSKeyedUnarchiver unarchiveObjectWithFile:[WHC_DownloadObject getCachedFileName:downloadPath]];
 }
 
++ (BOOL)existLocalSavePath:(NSString *)downloadPath {
+    NSFileManager * fm = [NSFileManager defaultManager];
+    BOOL isDirectory = NO;
+    return [fm fileExistsAtPath:[WHC_DownloadObject getCachedFileName:downloadPath] isDirectory:&isDirectory];
+}
+
 + (NSArray *)readDiskAllCache {
     NSMutableArray * downloadObjectArr = [NSMutableArray array];
     NSMutableDictionary * cacheDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:[WHC_DownloadObject cachePlistPath]];

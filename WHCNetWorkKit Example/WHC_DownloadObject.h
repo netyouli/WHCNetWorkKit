@@ -41,4 +41,6 @@ typedef NS_OPTIONS(NSUInteger, WHCDownloadState) {
 - (void)writeDiskCache;
 
 - (void)removeFromDisk;
+
++ (BOOL)existLocalSavePath:(NSString *)downloadPath;
 @end
